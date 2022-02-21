@@ -1,0 +1,47 @@
+# This file contains metadata for your plugin.
+
+# This file should be included when you package your plugin.# Mandatory items:
+
+[general]
+name=Peel Orange Scale Distortion Visualizer
+qgisMinimumVersion=3.0
+description=This plugin visualizes the scale distortion for a given region
+version=0.1
+author=Patrick McGranaghan
+email=ptmcgra@yahoo.com
+
+about=OrangePeel is a plugin that visualizes the scale distortion on a given region on a given projection. This tool algorithmically creates a grid of points over a given region and calculates the scale factor at each of these points. The points are then used in making a heat map that visualize the gradient of change in scale distortion over that region.
+
+tracker=https://github.com/petrarch1603/PeelOrange/issues
+repository=https://github.com/petrarch1603/PeelOrange
+# End of mandatory metadata
+
+# Recommended items:
+
+hasProcessingProvider=no
+# Uncomment the following line and add your changelog:
+# changelog=
+
+# Tags are comma separated with spaces allowed
+tags=scale,projection,distortion,visualizer,peel,orange
+
+homepage=https://github.com/petrarch1603/PeelOrange
+category=Plugins
+icon=icon.png
+# experimental flag
+experimental=False
+
+# deprecated flag (applies to the whole plugin, not just a single version)
+deprecated=False
+
+# Since QGIS 3.8, a comma separated list of plugins to be installed
+# (or upgraded) can be specified.
+# Check the documentation for more information.
+# plugin_dependencies=
+
+Category of the plugin: Raster, Vector, Database or Web
+# category=
+
+# If the plugin can run on QGIS Server.
+server=False
+
