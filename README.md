@@ -1,3 +1,5 @@
+# This is a work in progress.
+
 # OrangePeel
 
 OrangePeel is a plugin that visualizes the scale distortion on a given region on a given projection. The difficulties and trade-offs of making flat maps from the curving globe is a famous problem in the history of cartography. 
@@ -6,7 +8,6 @@ This tool algorithmically creates a grid of points over a given region on a give
 
 This is useful for quickly comparing different projections in preparation for a new map project. OrangePeel can also provide a way of visualizing the changes in making custom projections.
 
-OrangePeel 
 
 > No map projection shows scale correctly throughout the map, but there are usually one or more lines on the map along which the scale remains true. By choosing the locations of these lines properly, the scale errors elsewhere may be minimized, although some errors may still be large, depending on the size of the area being mapped and the projection. 
 
