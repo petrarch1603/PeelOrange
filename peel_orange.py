@@ -26,7 +26,7 @@ from qgis.PyQt.QtGui import QIcon
 from qgis.PyQt.QtWidgets import QAction
 
 # Initialize Qt resources from file resources.py
-from .resources import *
+# from .resources import *
 # Import the code for the dialog
 from .peel_orange_dialog import PeelOrangeDialog
 import os.path
@@ -81,7 +81,6 @@ class PeelOrange:
         """
         # noinspection PyTypeChecker,PyArgumentList,PyCallByClass
         return QCoreApplication.translate('PeelOrange', message)
-
 
     def add_action(
         self,
