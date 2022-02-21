@@ -131,3 +131,5 @@ dmypy.json
 .pyre/
 
 .idea/dictionaries/*.xml
+.DS_Store
+.idea/.DS_Store
