@@ -30,6 +30,7 @@ from qgis.PyQt.QtWidgets import QAction
 # Import the code for the dialog
 from .peel_orange_dialog import PeelOrangeDialog
 import os.path
+from .peel_orange_functions import read_metadata_txt
 
 
 class PeelOrange:
@@ -187,6 +188,11 @@ class PeelOrange:
         if self.first_start == True:
             self.first_start = False
             self.dlg = PeelOrangeDialog()
+            # Get Metadata as a dictionary
+            meta_dict = read_metadata_txt('metadata.txt')
+            version_no = meta_dict['version']
+            self.dlg.version_label.setStyleSheet('color: light-gray')
+            self.dlg.version_label.setText(f"Version {version_no}")
 
         # show the dialog
         self.dlg.show()
@@ -197,3 +203,4 @@ class PeelOrange:
             # Do something useful here - delete the line containing pass and
             # substitute with your code.
             pass
+
