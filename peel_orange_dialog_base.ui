@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>525</width>
-    <height>300</height>
+    <width>521</width>
+    <height>314</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -120,6 +120,42 @@
    </property>
    <property name="text">
     <string>Threshold </string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="version_label">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>290</y>
+     <width>101</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <pointsize>9</pointsize>
+    </font>
+   </property>
+   <property name="text">
+    <string>Version ??</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="attribution_label">
+   <property name="geometry">
+    <rect>
+     <x>330</x>
+     <y>290</y>
+     <width>181</width>
+     <height>20</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <pointsize>9</pointsize>
+    </font>
+   </property>
+   <property name="text">
+    <string>Created by Patrick McGranaghan 2022</string>
    </property>
   </widget>
  </widget>
