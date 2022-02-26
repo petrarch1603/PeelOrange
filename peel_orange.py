@@ -32,6 +32,7 @@ from .peel_orange_dialog import PeelOrangeDialog
 import os.path
 from .peel_orange_functions import read_metadata_txt
 
+from qgis.core import QgsMessageLog, Qgis
 
 class PeelOrange:
     """QGIS Plugin Implementation."""
@@ -193,6 +194,7 @@ class PeelOrange:
             version_no = meta_dict['version']
             self.dlg.version_label.setStyleSheet('color: light-gray')
             self.dlg.version_label.setText(f"Version {version_no}")
+            self.dlg.mLCB.layerChanged.connect(self.mlcb_layerChanged)
 
         # show the dialog
         self.dlg.show()
@@ -202,5 +204,12 @@ class PeelOrange:
         if result:
             # Do something useful here - delete the line containing pass and
             # substitute with your code.
-            pass
+            my_lyr = self.dlg.mLCB.currentLayer()
 
+            # Add a log message
+            for item in my_lyr.getFeatures():
+                QgsMessageLog.logMessage(f"Layer: {item}", "Peel_Orange", level=Qgis.Info)
+
+
+    def mlcb_layerChanged(self, lyr):
+        self.dlg.mLCB.setLayer(lyr)
