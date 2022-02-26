@@ -207,8 +207,9 @@ class PeelOrange:
             my_lyr = self.dlg.mLCB.currentLayer()
 
             # Add a log message
-            for item in my_lyr.getFeatures():
-                QgsMessageLog.logMessage(f"Layer: {item}", "Peel_Orange", level=Qgis.Info)
+            QgsMessageLog.logMessage(f"CRS: {my_lyr.crs().description()}",
+                                     "Peel_Orange",
+                                     level=Qgis.Info)
 
 
     def mlcb_layerChanged(self, lyr):
