@@ -25,14 +25,15 @@ from qgis.PyQt.QtCore import QSettings, QTranslator, QCoreApplication
 from qgis.PyQt.QtGui import QIcon
 from qgis.PyQt.QtWidgets import QAction
 
+
 # Initialize Qt resources from file resources.py
 # from .resources import *
 # Import the code for the dialog
 from .peel_orange_dialog import PeelOrangeDialog
 import os.path
-from .peel_orange_functions import read_metadata_txt
+from .peel_orange_functions import *
 
-from qgis.core import QgsMessageLog, Qgis
+from qgis.core import QgsMessageLog, Qgis, QgsProject
 
 class PeelOrange:
     """QGIS Plugin Implementation."""
@@ -210,7 +211,9 @@ class PeelOrange:
             QgsMessageLog.logMessage(f"CRS: {my_lyr.crs().description()}",
                                      "Peel_Orange",
                                      level=Qgis.Info)
-
+            my_hex_grid = create_grid(my_lyr)
+            my_centroids = create_centroids(my_hex_grid)
+            QgsProject.instance().addMapLayer(my_centroids, True)  # You can use false here to hide it
 
     def mlcb_layerChanged(self, lyr):
         self.dlg.mLCB.setLayer(lyr)
