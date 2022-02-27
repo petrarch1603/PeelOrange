@@ -35,6 +35,8 @@ class App:
         self.cell_size = self.get_cell_size(self.lyr)
         self.hex_grid = self.create_grid()
         self.centroid_lyr = self.create_centroids()
+        self.field_idx = self.centroid_lyr.fields().indexOf('scale_dist')
+        self.scales_list = self.add_scales_to_centroid()
 
     def get_cell_size(self, lyr, divisible=100):
         # Get shorter distance of sides of extent
@@ -69,8 +71,9 @@ class App:
         with edit(self.centroid_lyr):
             for f in self.centroid_lyr.getFeatures():
                 my_point = MyPointObject(f.geometry(), self.centroid_lyr.crs(), self.cell_size)
-                self.centroid_lyr.changeAttributeValue(f.id(), my_field_idx, my_point.scale_distortion)
+                self.centroid_lyr.changeAttributeValue(f.id(), self.field_idx, my_point.scale_distortion)
                 my_scales_list.append(my_point.scale_distortion)
+        return my_scales_list
 
 
 class MyPointObject:
