@@ -30,8 +30,9 @@ def read_metadata_txt(filename: str) -> dict:
 
 
 class App:
-    def __init__(self, lyr):
+    def __init__(self, lyr, threshold):
         self.lyr = lyr
+        self.threshold = threshold
         self.cell_size = self.get_cell_size(self.lyr)
         self.hex_grid = self.create_grid()
         self.centroid_lyr = self.create_centroids()
@@ -83,7 +84,7 @@ class App:
              'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT,
              'PREDICATE': [0, 1],
              'PREFIX': ''}
-        return processing.run('native:joinattributesbylocation', join_dict)
+        return processing.run('native:joinattributesbylocation', join_dict)['OUTPUT']
 
 # noinspection PyCallByClass,PyArgumentList
 class MyPointObject:
