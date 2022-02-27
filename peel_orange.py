@@ -207,10 +207,10 @@ class PeelOrange:
             # substitute with your code.
             my_lyr = self.dlg.mLCB.currentLayer()
 
-            # Add a log message
-            QgsMessageLog.logMessage(f"CRS: {my_lyr.crs().description()}",
-                                     "Peel_Orange",
-                                     level=Qgis.Info)
+            # # Add a log message
+            # QgsMessageLog.logMessage(f"CRS: {my_lyr.crs().description()}",
+            #                          "Peel_Orange",
+            #                          level=Qgis.Info)
             my_app = App(my_lyr)
             QgsProject.instance().addMapLayer(my_app.centroid_lyr, True)  # You can use false here to hide it
 
