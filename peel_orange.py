@@ -211,10 +211,8 @@ class PeelOrange:
             QgsMessageLog.logMessage(f"CRS: {my_lyr.crs().description()}",
                                      "Peel_Orange",
                                      level=Qgis.Info)
-            my_hex_grid = create_grid(my_lyr)
-            my_centroids = create_centroids(my_hex_grid)
-            assert my_centroids.featureCount() != 0 and my_hex_grid.featureCount() != 0
-            QgsProject.instance().addMapLayer(my_centroids, True)  # You can use false here to hide it
+            my_app = App(my_lyr)
+            QgsProject.instance().addMapLayer(my_app.centroid_lyr, True)  # You can use false here to hide it
 
     def mlcb_layerChanged(self, lyr):
         self.dlg.mLCB.setLayer(lyr)
