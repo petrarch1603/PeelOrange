@@ -1,6 +1,16 @@
 import os
 import processing
-from qgis.core import QgsProcessing, QgsVectorLayer
+from qgis.core import QgsProcessing, \
+    QgsCoordinateTransform, \
+    QgsField, \
+    QgsDistanceArea, \
+    QgsCoordinateReferenceSystem, \
+    QgsGeometry, \
+    QgsPointXY, \
+    QgsProject, \
+    edit
+
+from qgis.PyQt.QtCore import QVariant
 import configparser
 
 
@@ -19,31 +29,87 @@ def read_metadata_txt(filename: str) -> dict:
     return dict(metadata)
 
 
-def get_cell_size(lyr, divisible=100):
-    # Get shorter distance of sides of extent
-    my_min = min(lyr.extent().width(), lyr.extent().height())
-    print(my_min)
-    return int(my_min/100)
+class App:
+    def __init__(self, lyr):
+        self.lyr = lyr
+        self.cell_size = self.get_cell_size(self.lyr)
+        self.hex_grid = self.create_grid()
+        self.centroid_lyr = self.create_centroids()
+
+    def get_cell_size(self, lyr, divisible=100):
+        # Get shorter distance of sides of extent
+        my_min = min(lyr.extent().width(), lyr.extent().height())
+        print(my_min)
+        return int(my_min / 100)
+
+    def create_grid(self):
+        print(self.cell_size)
+        hex_dict = {'CRS': self.lyr.crs(),
+                    'EXTENT': self.lyr.extent(),
+                    'HOVERLAY': 0,
+                    'HSPACING': self.cell_size,
+                    'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT,
+                    'TYPE': 4,  # 4 is for Hexagons
+                    'VOVERLAY': 0,
+                    'VSPACING': self.cell_size}
+        return processing.run('native:creategrid', hex_dict)['OUTPUT']
+
+    def create_centroids(self):
+        centroid_dict = {'ALL_PARTS': True,
+                         'INPUT': self.hex_grid,
+                         'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT}
+        centroid_lyr = processing.run('native:centroids', centroid_dict)['OUTPUT']
+        myField = QgsField('scale_dist', QVariant.Double)
+        centroid_lyr.dataProvider().addAttributes([myField])
+        centroid_lyr.updateFields()
+        return centroid_lyr
+
+    def add_scales_to_centroid(self):
+        my_scales_list = []
+        with edit(self.centroid_lyr):
+            for f in self.centroid_lyr.getFeatures():
+                my_point = MyPointObject(f.geometry(), self.centroid_lyr.crs(), self.cell_size)
+                self.centroid_lyr.changeAttributeValue(f.id(), my_field_idx, my_point.scale_distortion)
+                my_scales_list.append(my_point.scale_distortion)
 
 
-def create_grid(lyr):
-    my_cell_size = get_cell_size(lyr)
-    print(my_cell_size)
-    hex_dict = {'CRS': lyr.crs(),
-                'EXTENT': lyr.extent(),
-                'HOVERLAY': 0,
-                'HSPACING': my_cell_size,
-                'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT,
-                'TYPE': 4,  # 4 is for Hexagons
-                'VOVERLAY': 0,
-                'VSPACING': my_cell_size}
-    return processing.run('native:creategrid', hex_dict)['OUTPUT']
+class MyPointObject:
+    def __init__(self, point, crs, armspan):
+        """
+        :type armspan: float, int - This is the span of distance both north/south and east/west from the point
+        """
+        self.point = point
+        self.crs = crs
+        self.armspan = int(armspan)
+        self.x = self.point.asPoint().x()
+        self.y = self.point.asPoint().y()
+        self.e_grid = QgsGeometry.fromPointXY(QgsPointXY(self.x + (self.armspan / 2), self.y))
+        self.w_grid = QgsGeometry.fromPointXY(QgsPointXY(self.x - (self.armspan / 2), self.y))
+        self.n_grid = QgsGeometry.fromPointXY(QgsPointXY(self.x, self.y + (self.armspan / 2)))
+        self.s_grid = QgsGeometry.fromPointXY(QgsPointXY(self.x, self.y - (self.armspan / 2)))
+        try:
+            assert int(self.e_grid.asPoint().x()) - int(self.w_grid.asPoint().x()) == int(armspan)
+            assert int(self.n_grid.asPoint().y()) - int(self.s_grid.asPoint().y()) == int(armspan)
+        except AssertionError as e:
+            print(self.e_grid.asPoint().x() - self.w_grid.asPoint().x())
+            print(self.n_grid.asPoint().y() - self.s_grid.asPoint().y())
+        self.e_wgs = self.tr(self.e_grid)
+        self.w_wgs = self.tr(self.w_grid)
+        self.n_wgs = self.tr(self.n_grid)
+        self.s_wgs = self.tr(self.s_grid)
+        self.e_w_dist = self.wgs_dist(self.e_wgs, self.w_wgs)
+        self.n_s_dist = self.wgs_dist(self.n_wgs, self.s_wgs)
+        self.avg_dist = (self.e_w_dist + self.n_s_dist) / 2
+        self.scale_distortion = self.armspan / self.avg_dist
 
+    def tr(self, grid_point):
+        my_tr = QgsCoordinateTransform(self.crs, QgsCoordinateReferenceSystem.fromEpsgId(4326), QgsProject.instance())
+        wgs_point = QgsGeometry(grid_point)
+        wgs_point.transform(my_tr)
+        return wgs_point
 
-def create_centroids(lyr):
-    centroid_dict = {'ALL_PARTS': True,
-                     'INPUT': lyr,
-                     'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT}
-    return processing.run('native:centroids', centroid_dict)['OUTPUT']
-
-
+    def wgs_dist(self, wgs_point1, wgs_point2):
+        da = QgsDistanceArea()
+        da.setSourceCrs(QgsCoordinateReferenceSystem.fromEpsgId(4326), QgsProject.instance().transformContext())
+        da.setEllipsoid("WGS84")
+        return da.measureLine(wgs_point1.asPoint(), wgs_point2.asPoint())
