@@ -181,7 +181,7 @@ class PeelOrange:
                 action)
             self.iface.removeToolBarIcon(action)
 
-
+    # noinspection PyTypeChecker,PyCallByClass
     def run(self):
         """Run method that performs all the real work"""
 
@@ -207,11 +207,13 @@ class PeelOrange:
             # substitute with your code.
             my_lyr = self.dlg.mLCB.currentLayer()
 
-            # # Add a log message
-            # QgsMessageLog.logMessage(f"CRS: {my_lyr.crs().description()}",
-            #                          "Peel_Orange",
-            #                          level=Qgis.Info)
             my_app = App(my_lyr)
+            # Add a log message
+            QgsMessageLog.logMessage(f"Maximum Scale: {max(my_app.scales_list)}\n"
+                                     f"Minimum Scale: {min(my_app.scales_list)}",
+                                     "Peel_Orange",
+                                     level=Qgis.Info)
+
             QgsProject.instance().addMapLayer(my_app.centroid_lyr, True)  # You can use false here to hide it
 
     def mlcb_layerChanged(self, lyr):

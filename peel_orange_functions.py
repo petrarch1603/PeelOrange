@@ -74,7 +74,9 @@ class App:
         return my_scales_list
 
 
+# noinspection PyCallByClass,PyArgumentList
 class MyPointObject:
+    # noinspection PyCallByClass
     def __init__(self, point, crs, armspan):
         """
         :type armspan: float, int - This is the span of distance both north/south and east/west from the point
@@ -104,13 +106,16 @@ class MyPointObject:
         self.scale_distortion = self.armspan / self.avg_dist
 
     def tr(self, grid_point):
-        my_tr = QgsCoordinateTransform(self.crs, QgsCoordinateReferenceSystem.fromEpsgId(4326), QgsProject.instance())
+        my_tr = QgsCoordinateTransform(self.crs,
+                                       QgsCoordinateReferenceSystem.fromEpsgId(epsg=4326),
+                                       QgsProject.instance())
         wgs_point = QgsGeometry(grid_point)
         wgs_point.transform(my_tr)
         return wgs_point
 
+    # noinspection PyCallByClass
     def wgs_dist(self, wgs_point1, wgs_point2):
         da = QgsDistanceArea()
-        da.setSourceCrs(QgsCoordinateReferenceSystem.fromEpsgId(4326), QgsProject.instance().transformContext())
+        da.setSourceCrs(QgsCoordinateReferenceSystem.fromEpsgId(epsg=4326), QgsProject.instance().transformContext())
         da.setEllipsoid("WGS84")
         return da.measureLine(wgs_point1.asPoint(), wgs_point2.asPoint())
