@@ -36,7 +36,6 @@ class App:
         self.cell_size = self.get_cell_size(self.lyr)
         self.hex_grid = self.create_grid()
         self.centroid_lyr = self.create_centroids()
-        self.field_idx = self.centroid_lyr.fields().indexOf('scale_dist')
         self.scales_list = self.add_scales_to_centroid()
         self.assigned_hex_grid = self.assign_scales_to_grid()
 
@@ -61,17 +60,23 @@ class App:
                          'INPUT': self.hex_grid,
                          'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT}
         centroid_lyr = processing.run('native:centroids', centroid_dict)['OUTPUT']
-        myField = QgsField('scale_dist', QVariant.Double)
-        centroid_lyr.dataProvider().addAttributes([myField])
+        myScaleField = QgsField('scale_dist', QVariant.Double)
+        myAbsField = QgsField('abs_delta', QVariant.Double)
+        centroid_lyr.dataProvider().addAttributes([myScaleField])
+        centroid_lyr.dataProvider().addAttributes([myAbsField])
         centroid_lyr.updateFields()
         return centroid_lyr
 
     def add_scales_to_centroid(self):
+        scale_field_idx = self.centroid_lyr.fields().indexOf('scale_dist')
+        abs_field_idx = self.centroid_lyr.fields().indexOf('abs_delta')
         my_scales_list = []
         with edit(self.centroid_lyr):
             for f in self.centroid_lyr.getFeatures():
                 my_point = MyPointObject(f.geometry(), self.centroid_lyr.crs(), self.cell_size)
-                self.centroid_lyr.changeAttributeValue(f.id(), self.field_idx, my_point.scale_distortion)
+                self.centroid_lyr.changeAttributeValue(f.id(), scale_field_idx, my_point.scale_distortion)
+                my_abs_delta = abs(1-my_point.scale_distortion)
+                self.centroid_lyr.changeAttributeValue(f.id(), abs_field_idx, my_abs_delta)
                 my_scales_list.append(my_point.scale_distortion)
         return my_scales_list
 
@@ -79,12 +84,13 @@ class App:
         join_dict = {'DISCARD_NONMATCHING': True,
              'INPUT': self.hex_grid,
              'JOIN': self.centroid_lyr,
-             'JOIN_FIELDS': ['scale_dist'],
+             'JOIN_FIELDS': ['scale_dist', 'abs_delta'],
              'METHOD': 1,
              'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT,
              'PREDICATE': [0, 1],
              'PREFIX': ''}
         return processing.run('native:joinattributesbylocation', join_dict)['OUTPUT']
+
 
 # noinspection PyCallByClass,PyArgumentList
 class MyPointObject:
