@@ -37,6 +37,7 @@ class App:
         self.centroid_lyr = self.create_centroids()
         self.field_idx = self.centroid_lyr.fields().indexOf('scale_dist')
         self.scales_list = self.add_scales_to_centroid()
+        self.assigned_hex_grid = self.assign_scales_to_grid()
 
     def get_cell_size(self, lyr, divisible=100):
         # Get shorter distance of sides of extent
@@ -73,10 +74,19 @@ class App:
                 my_scales_list.append(my_point.scale_distortion)
         return my_scales_list
 
+    def assign_scales_to_grid(self):
+        join_dict = {'DISCARD_NONMATCHING': True,
+             'INPUT': self.hex_grid,
+             'JOIN': self.centroid_lyr,
+             'JOIN_FIELDS': ['scale_dist'],
+             'METHOD': 1,
+             'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT,
+             'PREDICATE': [0, 1],
+             'PREFIX': ''}
+        return processing.run('native:joinattributesbylocation', join_dict)
 
 # noinspection PyCallByClass,PyArgumentList
 class MyPointObject:
-    # noinspection PyCallByClass
     def __init__(self, point, crs, armspan):
         """
         :type armspan: float, int - This is the span of distance both north/south and east/west from the point
