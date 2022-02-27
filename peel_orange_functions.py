@@ -106,6 +106,7 @@ class MyPointObject:
         except AssertionError as e:
             print(self.e_grid.asPoint().x() - self.w_grid.asPoint().x())
             print(self.n_grid.asPoint().y() - self.s_grid.asPoint().y())
+            print(e)
         self.e_wgs = self.tr(self.e_grid)
         self.w_wgs = self.tr(self.w_grid)
         self.n_wgs = self.tr(self.n_grid)
