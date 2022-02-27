@@ -41,11 +41,9 @@ class App:
     def get_cell_size(self, lyr, divisible=100):
         # Get shorter distance of sides of extent
         my_min = min(lyr.extent().width(), lyr.extent().height())
-        print(my_min)
         return int(my_min / 100)
 
     def create_grid(self):
-        print(self.cell_size)
         hex_dict = {'CRS': self.lyr.crs(),
                     'EXTENT': self.lyr.extent(),
                     'HOVERLAY': 0,
