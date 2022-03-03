@@ -21,6 +21,7 @@
  *                                                                         *
  ***************************************************************************/
 """
+import pyproj
 from qgis.PyQt.QtCore import QSettings, QTranslator, QCoreApplication
 from qgis.PyQt.QtGui import QIcon
 from qgis.PyQt.QtWidgets import QAction
@@ -35,6 +36,7 @@ from .peel_orange_functions import *
 
 from qgis.core import QgsMessageLog, Qgis, QgsProject
 
+print(pyproj.__version__)
 
 class PeelOrange:
     """QGIS Plugin Implementation."""
@@ -207,7 +209,6 @@ class PeelOrange:
             # substitute with your code.
             my_lyr = self.dlg.mLCB.currentLayer()
             threshold = self.dlg.thresholdBox.cleanText()
-            print(threshold)
             my_app = App(my_lyr, threshold)
             # Add a log message
             QgsMessageLog.logMessage(f"Maximum Scale: {max(my_app.scales_list)}\n"
@@ -215,6 +216,6 @@ class PeelOrange:
                                      "Peel_Orange",
                                      level=Qgis.Info)
             QgsProject.instance().addMapLayer(my_app.assigned_hex_grid, True)  # You can use false here to hide it
-
+            # QgsProject.instance().addMapLayer(my_app.centroid_lyr, True)  # You can use false here to hide it
     def mlcb_layerChanged(self, lyr):
         self.dlg.mLCB.setLayer(lyr)
