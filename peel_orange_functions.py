@@ -78,6 +78,7 @@ class App:
                 my_abs_delta = abs(1-my_point.scale_distortion)
                 self.centroid_lyr.changeAttributeValue(f.id(), abs_field_idx, my_abs_delta)
                 my_scales_list.append(my_point.scale_distortion)
+        print(my_point.n_wgs)
         return my_scales_list
 
     def assign_scales_to_grid(self):
@@ -107,21 +108,21 @@ class MyPointObject:
         self.w_grid = QgsGeometry.fromPointXY(QgsPointXY(self.x - (self.armspan / 2), self.y))
         self.n_grid = QgsGeometry.fromPointXY(QgsPointXY(self.x, self.y + (self.armspan / 2)))
         self.s_grid = QgsGeometry.fromPointXY(QgsPointXY(self.x, self.y - (self.armspan / 2)))
-        try:
-            assert int(self.e_grid.asPoint().x()) - int(self.w_grid.asPoint().x()) == int(armspan)
-            assert int(self.n_grid.asPoint().y()) - int(self.s_grid.asPoint().y()) == int(armspan)
-        except AssertionError as e:
-            print(self.e_grid.asPoint().x() - self.w_grid.asPoint().x())
-            print(self.n_grid.asPoint().y() - self.s_grid.asPoint().y())
-            print(e)
+        # try:
+        #     assert int(self.e_grid.asPoint().x()) - int(self.w_grid.asPoint().x()) == int(armspan)
+        #     assert int(self.n_grid.asPoint().y()) - int(self.s_grid.asPoint().y()) == int(armspan)
+        # except AssertionError as e:
+        #     print(self.e_grid.asPoint().x() - self.w_grid.asPoint().x())
+        #     print(self.n_grid.asPoint().y() - self.s_grid.asPoint().y())
+        #     print(e)
         self.e_wgs = self.tr(self.e_grid)
         self.w_wgs = self.tr(self.w_grid)
         self.n_wgs = self.tr(self.n_grid)
         self.s_wgs = self.tr(self.s_grid)
         self.e_w_dist = self.wgs_dist(self.e_wgs, self.w_wgs)
         self.n_s_dist = self.wgs_dist(self.n_wgs, self.s_wgs)
-        self.avg_dist = (self.e_w_dist + self.n_s_dist) / 2
-        self.scale_distortion = self.armspan / self.avg_dist
+        # self.avg_dist = (self.e_w_dist + self.n_s_dist) / 2
+        self.scale_distortion = self.armspan / max(self.e_w_dist, self.n_s_dist)
 
     def tr(self, grid_point):
         my_tr = QgsCoordinateTransform(self.crs,
