@@ -38,6 +38,7 @@ from qgis.core import QgsMessageLog, Qgis, QgsProject
 
 print(pyproj.__version__)
 
+
 class PeelOrange:
     """QGIS Plugin Implementation."""
 
@@ -217,5 +218,6 @@ class PeelOrange:
                                      level=Qgis.Info)
             QgsProject.instance().addMapLayer(my_app.assigned_hex_grid, True)  # You can use false here to hide it
             # QgsProject.instance().addMapLayer(my_app.centroid_lyr, True)  # You can use false here to hide it
+
     def mlcb_layerChanged(self, lyr):
         self.dlg.mLCB.setLayer(lyr)
