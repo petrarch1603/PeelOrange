@@ -32,7 +32,7 @@ def read_metadata_txt(filename: str) -> dict:
 def exclude_degrees_layers(layers: list) -> list:
     excluded_list = []
     for l in layers:
-        if l.crs().mapUnits() == 6:
+        if l.crs().mapUnits() == 6:  # 6 is the unit type for degrees
             excluded_list.append(l)
     return excluded_list
 
