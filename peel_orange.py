@@ -24,7 +24,8 @@
 import pyproj
 from qgis.PyQt.QtCore import QSettings, QTranslator, QCoreApplication
 from qgis.PyQt.QtGui import QIcon
-from qgis.PyQt.QtWidgets import QAction
+from qgis.PyQt.QtWidgets import QAction, QMessageBox
+from qgis.core import QgsMapLayerProxyModel
 
 
 # Initialize Qt resources from file resources.py
@@ -35,8 +36,6 @@ import os.path
 from .peel_orange_functions import *
 
 from qgis.core import QgsMessageLog, Qgis, QgsProject
-
-print(pyproj.__version__)
 
 
 class PeelOrange:
@@ -171,9 +170,9 @@ class PeelOrange:
             text=self.tr(u'PeelOrange - Scale Distortion Visualizer'),
             callback=self.run,
             parent=self.iface.mainWindow())
-
         # will be set False in run()
         self.first_start = True
+
 
     def unload(self):
         """Removes the plugin menu item and icon from QGIS GUI."""
@@ -190,14 +189,39 @@ class PeelOrange:
         # Create the dialog with elements (after translation) and keep reference
         # Only create GUI ONCE in callback, so that it will only load when the plugin is started
         if self.first_start:
+            # Check that the CRS is a projected coordinate system
+            if QgsProject.instance().crs().mapUnits() == 6:
+                print(QgsProject.instance().crs().mapUnits())
+                # QgsProject.messageBar().pushMessage("bad crs!")
+                warn_box = QMessageBox()
+                warn_box.setIcon(QMessageBox.Information)
+                warn_box.setText("Warning: project is using a geographic coordinate system.\n"
+                                 "Peel Orange only works on projected coordinate systems")
+                warn_box.exec_()
+                return
             self.first_start = False
             self.dlg = PeelOrangeDialog()
+
+            # Ensure that CRS is a projected coordinate system
+            if QgsProject.instance().crs().mapUnits():
+                self.dlg.button_box.setDisabled(True)
+            # Set up and filter the layer combo box
+            layers_list = list(QgsProject.instance().mapLayers().values())  # This could probably be more elegant
+            excluded_list = exclude_degrees_layers(layers=layers_list)
+            self.dlg.mLCB.setExceptedLayerList(excluded_list)
+            self.dlg.mLCB.setShowCrs(True)
+            self.dlg.mLCB.setFilters(QgsMapLayerProxyModel.HasGeometry)
+            self.dlg.mLCB.layerChanged.connect(self.mlcb_layerChanged)
+
+            # Set up threshold
+            self.dlg.thresholdBox.setDisabled(True)  # This is disabled in this version
+            self.dlg.thresholdBox.setToolTip('This feature will be available in a future version')
+
             # Get Metadata as a dictionary
             meta_dict = read_metadata_txt('metadata.txt')
             version_no = meta_dict['version']
             self.dlg.version_label.setStyleSheet('color: light-gray')
             self.dlg.version_label.setText(f"Version {version_no}")
-            self.dlg.mLCB.layerChanged.connect(self.mlcb_layerChanged)
 
         # show the dialog
         self.dlg.show()
