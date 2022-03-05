@@ -29,6 +29,14 @@ def read_metadata_txt(filename: str) -> dict:
     return dict(metadata)
 
 
+def exclude_degrees_layers(layers: list) -> list:
+    excluded_list = []
+    for l in layers:
+        if l.crs().mapUnits() == 6:
+            excluded_list.append(l)
+    return excluded_list
+
+
 class App:
     def __init__(self, lyr, threshold):
         self.lyr = lyr
