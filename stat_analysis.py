@@ -1,6 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
+
 def get_stats(data_list):
     my_stat_dict ={}
     my_stat_dict['mean'] = np.mean(data_list)
