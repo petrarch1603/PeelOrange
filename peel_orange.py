@@ -21,7 +21,9 @@
  *                                                                         *
  ***************************************************************************/
 """
+import importlib
 import pyproj
+from qgis.PyQt.QtCore import Qt
 from qgis.PyQt.QtCore import QSettings, QTranslator, QCoreApplication
 from qgis.PyQt.QtGui import QIcon
 from qgis.PyQt.QtWidgets import QAction, QMessageBox
@@ -71,6 +73,7 @@ class PeelOrange:
         # Check if plugin was started the first time in current QGIS session
         # Must be set in initGui() to survive plugin reloads
         self.first_start = None
+        self.do_stat_analysis_flag = False
 
 
     # noinspection PyMethodMayBeStatic
@@ -213,6 +216,14 @@ class PeelOrange:
             self.dlg.mLCB.setFilters(QgsMapLayerProxyModel.HasGeometry)
             self.dlg.mLCB.layerChanged.connect(self.mlcb_layerChanged)
 
+            # Handle Statistical Analysis Checkbox
+            if importlib.util.find_spec("numpy") is not None and \
+               importlib.util.find_spec("matplotlib", package='pyplot') is not None:
+                self.dlg.stat_analysis_checkBox.stateChanged.connect(self.stat_analysis_checkBox_changed)
+            else:
+                self.dlg.stat_analysis_checkBox.setEnabled(False)
+                self.dlg.label_requirement.setDisabled(True)
+
             # Set up threshold
             self.dlg.thresholdBox.setDisabled(True)  # This is disabled in this version
             self.dlg.thresholdBox.setToolTip('This feature will be available in a future version')
@@ -244,3 +255,10 @@ class PeelOrange:
 
     def mlcb_layerChanged(self, lyr):
         self.dlg.mLCB.setLayer(lyr)
+
+    def stat_analysis_checkBox_changed(self, state):
+        print(str(state))
+        if state == Qt.Checked:
+            print('checked')
+            self.do_stat_analysis_flag = True
+
