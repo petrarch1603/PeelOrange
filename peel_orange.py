@@ -260,6 +260,7 @@ class PeelOrange:
                 for k, v in my_dict.items():
                     my_log += f"{k}: {v}\n"
                 post_log_message(my_log)
+                my_plt = stat_analysis.create_plot(f"{my_lyr.name()}")
 
     def mlcb_layerChanged(self, lyr):
         self.dlg.mLCB.setLayer(lyr)
