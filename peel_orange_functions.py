@@ -29,6 +29,7 @@ def read_metadata_txt(filename: str) -> dict:
     return dict(metadata)
 
 
+
 def exclude_degrees_layers(layers: list) -> list:
     excluded_list = []
     for l in layers:
@@ -130,7 +131,7 @@ class MyPointObject:
         self.e_w_dist = self.wgs_dist(self.e_wgs, self.w_wgs)
         self.n_s_dist = self.wgs_dist(self.n_wgs, self.s_wgs)
         # self.avg_dist = (self.e_w_dist + self.n_s_dist) / 2
-        self.scale_distortion = self.armspan / max(self.e_w_dist, self.n_s_dist)
+        self.scale_distortion = self.armspan / self.determine_greatest_delta()
 
     def tr(self, grid_point):
         my_tr = QgsCoordinateTransform(self.crs,
@@ -139,6 +140,18 @@ class MyPointObject:
         wgs_point = QgsGeometry(grid_point)
         wgs_point.transform(my_tr)
         return wgs_point
+
+    def determine_greatest_delta(self):
+        """
+        Determine which distance departs from the armspan the most. This number is the
+        greatest scale distortion for a given point.
+        """
+        e_w_delta = abs(self.e_w_dist-self.armspan)
+        n_s_delta = abs(self.n_s_dist-self.armspan)
+        if e_w_delta > n_s_delta:
+            return self.e_w_dist
+        else:
+            return self.n_s_dist
 
     # noinspection PyCallByClass
     def wgs_dist(self, wgs_point1, wgs_point2):
