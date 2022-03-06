@@ -28,5 +28,7 @@ class StatAnalysis:
         ax = fig.add_subplot()
         plt.grid()
         ax.set_title(f'{pretty_lyr_name} point scale distribution')
+        ax.set_xlabel('Scale Distortion')
+        ax.set_ylabel('Number of Points')
         plt.hist(self.data_list, bins=50, density=False, alpha=0.6, color='b')
         return plt
