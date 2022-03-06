@@ -22,3 +22,11 @@ class StatAnalysis:
                 'max': np.max(self.data_list),
                 'min': np.min(self.data_list)}
 
+    def create_plot(self, pretty_lyr_name: str) -> plt:
+        plt.ion()
+        fig = plt.figure()
+        ax = fig.add_subplot()
+        plt.grid()
+        ax.set_title(f'{pretty_lyr_name} point scale distribution')
+        plt.hist(self.data_list, bins=50, density=False, alpha=0.6, color='b')
+        return plt
