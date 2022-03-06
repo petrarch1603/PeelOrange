@@ -1,5 +1,10 @@
 import os
 import configparser
+from qgis.core import QgsClassificationQuantile, \
+                      QgsRendererRangeLabelFormat, \
+                      QgsStyle, \
+                      QgsGraduatedSymbolRenderer, \
+                      QgsClassificationEqualInterval
 
 
 def get_file_path(filename: str) -> str:
@@ -23,3 +28,26 @@ def exclude_degrees_layers(layers: list) -> list:
         if l.crs().mapUnits() == 6:  # 6 is the unit type for degrees
             excluded_list.append(l)
     return excluded_list
+
+
+def set_graduated_symbol(lyr) -> QgsGraduatedSymbolRenderer:
+    ramp_name = 'Spectral'
+    value_field = 'abs_delta'
+    num_classes = 15
+    classification_method = QgsClassificationQuantile()
+    my_format = QgsRendererRangeLabelFormat()
+    my_format.setFormat("%1 - %2")
+    my_format.setPrecision(3)
+    my_format.setTrimTrailingZeroes(True)
+    default_style = QgsStyle().defaultStyle()  # might be some potential to tweak this later on
+    color_ramp = default_style.colorRamp(ramp_name)
+
+    renderer = QgsGraduatedSymbolRenderer()
+    renderer.setClassAttribute(value_field)
+    renderer.setClassificationMethod(classification_method)
+    renderer.setLabelFormat(my_format)
+    # renderer.updateColorRamp(color_ramp)
+    renderer.updateClasses(vlayer=lyr,
+                           mode=QgsGraduatedSymbolRenderer.Quantile,
+                           nclasses=num_classes)
+    return renderer
