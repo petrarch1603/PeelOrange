@@ -203,8 +203,8 @@ class PeelOrange:
             self.dlg = PeelOrangeDialog()
 
             # Ensure that CRS is a projected coordinate system
-            if QgsProject.instance().crs().mapUnits():
-                self.dlg.button_box.setDisabled(True)
+            # if QgsProject.instance().crs().mapUnits():
+            #     self.dlg.button_box.setDisabled(True)
             # Set up and filter the layer combo box
             layers_list = list(QgsProject.instance().mapLayers().values())  # This could probably be more elegant
             excluded_list = exclude_degrees_layers(layers=layers_list)
