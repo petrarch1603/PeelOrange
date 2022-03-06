@@ -1,3 +1,4 @@
+from .peel_orange_functions import *
 import processing
 from qgis.core import QgsProcessing, \
     QgsCoordinateTransform, \
@@ -21,6 +22,10 @@ class App:
         self.centroid_lyr = self.create_centroids()
         self.scales_list = self.add_scales_to_centroid()
         self.assigned_hex_grid = self.assign_scales_to_grid()
+        my_renderer = set_graduated_symbol(self.assigned_hex_grid)
+        print(my_renderer)
+        self.assigned_hex_grid.setRenderer(my_renderer)
+        self.assigned_hex_grid.reload()
 
     def get_cell_size(self, divisible=100):
         # Get shorter distance of sides of extent
