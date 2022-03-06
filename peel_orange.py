@@ -34,7 +34,7 @@ from qgis.core import QgsMapLayerProxyModel
 from .peel_orange_dialog import PeelOrangeDialog
 import os.path
 from .peel_orange_functions import *
-
+from .app import *
 from qgis.core import QgsMessageLog, Qgis, QgsProject
 
 
