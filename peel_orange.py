@@ -72,6 +72,7 @@ class PeelOrange:
         # Must be set in initGui() to survive plugin reloads
         self.first_start = None
 
+
     # noinspection PyMethodMayBeStatic
     def tr(self, message):
         """Get the translation for a string using Qt translation API.
@@ -172,7 +173,6 @@ class PeelOrange:
             parent=self.iface.mainWindow())
         # will be set False in run()
         self.first_start = True
-
 
     def unload(self):
         """Removes the plugin menu item and icon from QGIS GUI."""
