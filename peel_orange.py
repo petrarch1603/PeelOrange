@@ -253,6 +253,13 @@ class PeelOrange:
 
             QgsProject.instance().addMapLayer(my_app.assigned_hex_grid, True)  # You can use false here to hide it
             # QgsProject.instance().addMapLayer(my_app.centroid_lyr, True)  # You can use false here to hide it
+            if self.do_stat_analysis_flag:
+                stat_analysis = StatAnalysis(my_app.assigned_hex_grid)
+                my_dict = stat_analysis.get_stats_dict()
+                my_log = ""
+                for k, v in my_dict.items():
+                    my_log += f"{k}: {v}\n"
+                post_log_message(my_log)
 
     def mlcb_layerChanged(self, lyr):
         self.dlg.mLCB.setLayer(lyr)
