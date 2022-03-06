@@ -37,6 +37,7 @@ from .peel_orange_dialog import PeelOrangeDialog
 import os.path
 from .peel_orange_functions import *
 from .app import *
+from .stat_analysis import *
 from qgis.core import QgsMessageLog, Qgis, QgsProject
 
 
@@ -244,12 +245,12 @@ class PeelOrange:
             # substitute with your code.
             my_lyr = self.dlg.mLCB.currentLayer()
             threshold = self.dlg.thresholdBox.cleanText()
-            my_app = App(my_lyr, threshold)
             # Add a log message
-            QgsMessageLog.logMessage(f"Maximum Scale: {max(my_app.scales_list)}\n"
-                                     f"Minimum Scale: {min(my_app.scales_list)}",
-                                     "Peel_Orange",
-                                     level=Qgis.Info)
+            post_log_message("Analysis beginning")
+
+            # Run app
+            my_app = App(my_lyr, threshold)
+
             QgsProject.instance().addMapLayer(my_app.assigned_hex_grid, True)  # You can use false here to hide it
             # QgsProject.instance().addMapLayer(my_app.centroid_lyr, True)  # You can use false here to hide it
 

@@ -1,11 +1,12 @@
 import os
 import configparser
-from qgis.core import QgsClassificationQuantile, \
+from qgis.core import Qgis, \
+                      QgsClassificationQuantile, \
                       QgsRendererRangeLabelFormat, \
                       QgsStyle, \
                       QgsGraduatedSymbolRenderer, \
-                      QgsClassificationEqualInterval
-
+                      QgsClassificationEqualInterval, \
+                      QgsMessageLog
 
 def get_file_path(filename: str) -> str:
     return os.path.abspath(os.path.join(
@@ -51,3 +52,9 @@ def set_graduated_symbol(lyr) -> QgsGraduatedSymbolRenderer:
                            mode=QgsGraduatedSymbolRenderer.Quantile,
                            nclasses=num_classes)
     return renderer
+
+
+def post_log_message(msg: str) -> None:
+    QgsMessageLog.logMessage(f"{msg}",
+                             "Peel_Orange",
+                             level=Qgis.Info)
