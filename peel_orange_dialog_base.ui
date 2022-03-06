@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>521</width>
-    <height>314</height>
+    <height>385</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -16,9 +16,9 @@
   <widget class="QDialogButtonBox" name="button_box">
    <property name="geometry">
     <rect>
-     <x>30</x>
-     <y>240</y>
-     <width>341</width>
+     <x>330</x>
+     <y>320</y>
+     <width>171</width>
      <height>32</height>
     </rect>
    </property>
@@ -126,7 +126,7 @@
    <property name="geometry">
     <rect>
      <x>10</x>
-     <y>290</y>
+     <y>360</y>
      <width>101</width>
      <height>16</height>
     </rect>
@@ -144,7 +144,7 @@
    <property name="geometry">
     <rect>
      <x>330</x>
-     <y>290</y>
+     <y>360</y>
      <width>181</width>
      <height>20</height>
     </rect>
@@ -161,8 +161,8 @@
   <widget class="QLabel" name="label_4">
    <property name="geometry">
     <rect>
-     <x>30</x>
-     <y>120</y>
+     <x>350</x>
+     <y>110</y>
      <width>131</width>
      <height>161</height>
     </rect>
@@ -172,6 +172,48 @@
    </property>
    <property name="pixmap">
     <pixmap>icon.png</pixmap>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_requirement">
+   <property name="geometry">
+    <rect>
+     <x>20</x>
+     <y>140</y>
+     <width>151</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <pointsize>9</pointsize>
+    </font>
+   </property>
+   <property name="text">
+    <string>Requires Numpy and Matplotlib</string>
+   </property>
+  </widget>
+  <widget class="QCheckBox" name="stat_analysis_checkBox">
+   <property name="geometry">
+    <rect>
+     <x>20</x>
+     <y>120</y>
+     <width>151</width>
+     <height>20</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <pointsize>14</pointsize>
+    </font>
+   </property>
+   <property name="toolTip">
+    <string/>
+   </property>
+   <property name="layoutDirection">
+    <enum>Qt::RightToLeft</enum>
+   </property>
+   <property name="text">
+    <string>Statistical Analysis  </string>
    </property>
   </widget>
  </widget>
