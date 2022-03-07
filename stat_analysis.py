@@ -30,14 +30,15 @@ class StatAnalysis:
         fig = plt.figure()
         ax = fig.add_subplot()
         plt.grid()
+        img = plt.imread("/img/oranges_background.jpg")
         ax.set_title(f'{pretty_lyr_name} point scale distribution')
         ax.set_xlabel('Scale Distortion')
         ax.set_ylabel('Number of Points')
+        ax.imshow(img)
         print(plt.hist(self.data_list, bins=50, density=False, alpha=0.6, color='b'))
         canvas = FigureCanvas(fig)
         self.dlg.lytMain.addWidget(canvas)
         plt.close()  # Must do this or it will plot twice!
-        return
 
     def show_plot(self):
         self.dlg.show()
