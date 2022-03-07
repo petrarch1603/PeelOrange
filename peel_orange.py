@@ -26,8 +26,9 @@ import pyproj
 from qgis.PyQt.QtCore import Qt
 from qgis.PyQt.QtCore import QSettings, QTranslator, QCoreApplication
 from qgis.PyQt.QtGui import QIcon
-from qgis.PyQt.QtWidgets import QAction, QMessageBox
+from qgis.PyQt.QtWidgets import QAction, QMessageBox, QGraphicsScene
 from qgis.core import QgsMapLayerProxyModel
+
 
 
 # Initialize Qt resources from file resources.py
@@ -35,9 +36,10 @@ from qgis.core import QgsMapLayerProxyModel
 # Import the code for the dialog
 from .peel_orange_dialog import PeelOrangeDialog
 import os.path
-from .peel_orange_functions import *
+# from .peel_orange_functions import *
 from .app import *
 from .stat_analysis import *
+from .peel_stat_results_dialog import DlgResults
 from qgis.core import QgsMessageLog, Qgis, QgsProject
 
 
@@ -260,7 +262,9 @@ class PeelOrange:
                 for k, v in my_dict.items():
                     my_log += f"{k}: {v}\n"
                 post_log_message(my_log)
-                my_plt = stat_analysis.create_plot(f"{my_lyr.name()}")
+                # Show the results dialog
+                stat_analysis.create_plot(f"{my_lyr.name()}")
+                stat_analysis.show_plot()
 
     def mlcb_layerChanged(self, lyr):
         self.dlg.mLCB.setLayer(lyr)

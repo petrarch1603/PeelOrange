@@ -11,14 +11,23 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 
 
-class Ui_Dialog(object):
-    def setupUi(self, Dialog):
-        Dialog.setObjectName("Dialog")
-        Dialog.resize(640, 480)
+class Ui_dlgResults(object):
+    def setupUi(self, dlgResults):
+        dlgResults.setObjectName("dlgResults")
+        dlgResults.resize(640, 480)
+        self.verticalLayoutWidget = QtWidgets.QWidget(dlgResults)
+        self.verticalLayoutWidget.setGeometry(QtCore.QRect(20, 10, 611, 451))
+        self.verticalLayoutWidget.setObjectName("verticalLayoutWidget")
+        self.lytMain = QtWidgets.QVBoxLayout(self.verticalLayoutWidget)
+        self.lytMain.setContentsMargins(0, 0, 0, 0)
+        self.lytMain.setObjectName("lytMain")
+        self.plt_canvas = QtWidgets.QWidget(self.verticalLayoutWidget)
+        self.plt_canvas.setObjectName("plt_canvas")
+        self.lytMain.addWidget(self.plt_canvas)
 
-        self.retranslateUi(Dialog)
-        QtCore.QMetaObject.connectSlotsByName(Dialog)
+        self.retranslateUi(dlgResults)
+        QtCore.QMetaObject.connectSlotsByName(dlgResults)
 
-    def retranslateUi(self, Dialog):
+    def retranslateUi(self, dlgResults):
         _translate = QtCore.QCoreApplication.translate
-        Dialog.setWindowTitle(_translate("Dialog", "Dialog"))
+        dlgResults.setWindowTitle(_translate("dlgResults", "Statistical Analysis"))
