@@ -8,6 +8,13 @@ from qgis.core import Qgis, \
                       QgsClassificationEqualInterval, \
                       QgsMessageLog
 
+
+def resolve_path(name, basepath=None):
+    if not basepath:
+      basepath = os.path.dirname(os.path.realpath(__file__))
+    return os.path.join(basepath, name)
+
+
 def get_file_path(filename: str) -> str:
     return os.path.abspath(os.path.join(
         os.path.dirname(__file__),
