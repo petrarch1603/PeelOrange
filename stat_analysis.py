@@ -3,6 +3,7 @@ import matplotlib.pyplot as plt
 from matplotlib.backends.backend_qt4agg import FigureCanvasQTAgg as FigureCanvas
 from qgis.PyQt.QtWidgets import QGraphicsScene
 from .peel_stat_results_dialog import DlgResults
+from .peel_orange_functions import *
 
 
 class StatAnalysis:
@@ -30,12 +31,17 @@ class StatAnalysis:
         fig = plt.figure()
         ax = fig.add_subplot()
         plt.grid()
-        img = plt.imread("/img/oranges_background.jpg")
+        # img = plt.imread(resolve_path("./img/oranges_background.jpg"))
+        # ax.imshow(img, extent=[-5, 80, -5, 30])
         ax.set_title(f'{pretty_lyr_name} point scale distribution')
         ax.set_xlabel('Scale Distortion')
         ax.set_ylabel('Number of Points')
-        ax.imshow(img)
         print(plt.hist(self.data_list, bins=50, density=False, alpha=0.6, color='b'))
+        # Plot the average and standard deviations
+        plt.axvline(x=self.stats_dict['mean'], ls="--", color='#2ca02c', alpha=0.95)
+        plt.axvline(x=(self.stats_dict['mean'] - self.stats_dict['std']), ls="--", color='#2ca02c', alpha=0.25)
+        plt.axvline(x=(self.stats_dict['mean'] + self.stats_dict['std']), ls="--", color='#2ca02c', alpha=0.25)
+        # TODO add labels to axvlines (see https://stackoverflow.com/questions/13413112/creating-labels-where-line-appears-in-matplotlib-figure)
         canvas = FigureCanvas(fig)
         self.dlg.lytMain.addWidget(canvas)
         plt.close()  # Must do this or it will plot twice!
