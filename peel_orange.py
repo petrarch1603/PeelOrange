@@ -77,7 +77,7 @@ class PeelOrange:
         # Must be set in initGui() to survive plugin reloads
         self.first_start = None
         self.do_stat_analysis_flag = False
-
+        self.do_thresh_flag = False
 
     # noinspection PyMethodMayBeStatic
     def tr(self, message):
@@ -228,8 +228,10 @@ class PeelOrange:
                 self.dlg.label_requirement.setDisabled(True)
 
             # Set up threshold
-            self.dlg.thresholdBox.setDisabled(True)  # This is disabled in this version
-            self.dlg.thresholdBox.setToolTip('This feature will be available in a future version')
+            self.dlg.thresholdBox.setDisabled(True)
+            self.dlg.thresh_checkBox.setToolTip('Threshold is the amount of scale distortion tolerance to '
+                                                'visualize in the drawing')
+            self.dlg.thresh_checkBox.stateChanged.connect(self.thresh_checkBox_changed)
 
             # Get Metadata as a dictionary
             meta_dict = read_metadata_txt('metadata.txt')
@@ -270,8 +272,13 @@ class PeelOrange:
         self.dlg.mLCB.setLayer(lyr)
 
     def stat_analysis_checkBox_changed(self, state):
-        print(str(state))
         if state == Qt.Checked:
-            print('checked')
             self.do_stat_analysis_flag = True
 
+    def thresh_checkBox_changed(self, state):
+        if state == Qt.Checked:
+            self.do_thresh_flag = True
+            self.dlg.thresholdBox.setDisabled(False)
+        else:
+            self.do_thresh_flag = False
+            self.dlg.thresholdBox.setDisabled(True)

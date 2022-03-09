@@ -29,13 +29,13 @@
     <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
    </property>
   </widget>
-  <widget class="QLabel" name="label">
+  <widget class="QLabel" name="title_label">
    <property name="geometry">
     <rect>
-     <x>70</x>
-     <y>0</y>
-     <width>411</width>
-     <height>31</height>
+     <x>60</x>
+     <y>10</y>
+     <width>393</width>
+     <height>24</height>
     </rect>
    </property>
    <property name="font">
@@ -51,7 +51,7 @@
   <widget class="QgsMapLayerComboBox" name="mLCB">
    <property name="geometry">
     <rect>
-     <x>140</x>
+     <x>130</x>
      <y>50</y>
      <width>371</width>
      <height>32</height>
@@ -61,13 +61,13 @@
     <string>Layer with features that define the region to visualize</string>
    </property>
   </widget>
-  <widget class="QLabel" name="label_2">
+  <widget class="QLabel" name="region_layer_label">
    <property name="geometry">
     <rect>
      <x>20</x>
-     <y>50</y>
-     <width>111</width>
-     <height>16</height>
+     <y>60</y>
+     <width>84</width>
+     <height>17</height>
     </rect>
    </property>
    <property name="font">
@@ -82,7 +82,7 @@
   <widget class="QDoubleSpinBox" name="thresholdBox">
    <property name="geometry">
     <rect>
-     <x>150</x>
+     <x>130</x>
      <y>90</y>
      <width>62</width>
      <height>22</height>
@@ -102,24 +102,6 @@
    </property>
    <property name="value">
     <double>2.000000000000000</double>
-   </property>
-  </widget>
-  <widget class="QLabel" name="label_3">
-   <property name="geometry">
-    <rect>
-     <x>20</x>
-     <y>90</y>
-     <width>111</width>
-     <height>21</height>
-    </rect>
-   </property>
-   <property name="font">
-    <font>
-     <pointsize>14</pointsize>
-    </font>
-   </property>
-   <property name="text">
-    <string>Threshold </string>
    </property>
   </widget>
   <widget class="QLabel" name="version_label">
@@ -177,10 +159,10 @@
   <widget class="QLabel" name="label_requirement">
    <property name="geometry">
     <rect>
-     <x>20</x>
+     <x>30</x>
      <y>140</y>
-     <width>151</width>
-     <height>16</height>
+     <width>138</width>
+     <height>11</height>
     </rect>
    </property>
    <property name="font">
@@ -197,8 +179,8 @@
     <rect>
      <x>20</x>
      <y>120</y>
-     <width>151</width>
-     <height>20</height>
+     <width>154</width>
+     <height>21</height>
     </rect>
    </property>
    <property name="font">
@@ -214,6 +196,22 @@
    </property>
    <property name="text">
     <string>Statistical Analysis  </string>
+   </property>
+  </widget>
+  <widget class="QCheckBox" name="thresh_checkBox">
+   <property name="geometry">
+    <rect>
+     <x>20</x>
+     <y>90</y>
+     <width>90</width>
+     <height>20</height>
+    </rect>
+   </property>
+   <property name="layoutDirection">
+    <enum>Qt::RightToLeft</enum>
+   </property>
+   <property name="text">
+    <string>Threshold </string>
    </property>
   </widget>
  </widget>
