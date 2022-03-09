@@ -13,7 +13,7 @@
   <property name="windowTitle">
    <string>Peel Orange Scale Distortion Visualizer</string>
   </property>
-  <widget class="QDialogButtonBox" name="button_box">
+  <widget class="QDialogButtonBox" name="exec_button">
    <property name="geometry">
     <rect>
      <x>330</x>
@@ -214,6 +214,33 @@
     <string>Threshold </string>
    </property>
   </widget>
+  <widget class="QLabel" name="warn_label">
+   <property name="geometry">
+    <rect>
+     <x>340</x>
+     <y>300</y>
+     <width>171</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <pointsize>9</pointsize>
+    </font>
+   </property>
+   <property name="layoutDirection">
+    <enum>Qt::LeftToRight</enum>
+   </property>
+   <property name="text">
+    <string>Selected Layer Must Have Features</string>
+   </property>
+   <property name="alignment">
+    <set>Qt::AlignCenter</set>
+   </property>
+   <property name="wordWrap">
+    <bool>false</bool>
+   </property>
+  </widget>
  </widget>
  <customwidgets>
   <customwidget>
@@ -225,7 +252,7 @@
  <resources/>
  <connections>
   <connection>
-   <sender>button_box</sender>
+   <sender>exec_button</sender>
    <signal>accepted()</signal>
    <receiver>PeelOrangeDialogBase</receiver>
    <slot>accept()</slot>
@@ -241,7 +268,7 @@
    </hints>
   </connection>
   <connection>
-   <sender>button_box</sender>
+   <sender>exec_button</sender>
    <signal>rejected()</signal>
    <receiver>PeelOrangeDialogBase</receiver>
    <slot>reject()</slot>

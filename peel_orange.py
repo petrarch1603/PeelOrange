@@ -207,13 +207,17 @@ class PeelOrange:
                 return
             self.first_start = False
             self.dlg = PeelOrangeDialog()
-
+            self.dlg.warn_label.setText('')
             # Ensure that CRS is a projected coordinate system
             # if QgsProject.instance().crs().mapUnits():
             #     self.dlg.button_box.setDisabled(True)
             # Set up and filter the layer combo box
             layers_list = list(QgsProject.instance().mapLayers().values())  # This could probably be more elegant
             excluded_list = exclude_degrees_layers(layers=layers_list)
+
+            # Set so Map Layer Combo Box Defaults to blank
+            self.dlg.mLCB.setCurrentIndex(-1)
+
             self.dlg.mLCB.setExceptedLayerList(excluded_list)
             self.dlg.mLCB.setShowCrs(True)
             self.dlg.mLCB.setFilters(QgsMapLayerProxyModel.HasGeometry)
@@ -238,6 +242,8 @@ class PeelOrange:
             version_no = meta_dict['version']
             self.dlg.version_label.setStyleSheet('color: light-gray')
             self.dlg.version_label.setText(f"Version {version_no}")
+
+
 
         # show the dialog
         self.dlg.show()
@@ -275,6 +281,13 @@ class PeelOrange:
 
     def mlcb_layerChanged(self, lyr):
         self.dlg.mLCB.setLayer(lyr)
+        if self.dlg.mLCB.currentLayer().featureCount() == 0:
+            self.dlg.warn_label.setText('Selected Layer Has No Features')
+            self.dlg.exec_button.setEnabled(False)
+        else:
+            self.dlg.warn_label.setText('')
+            self.dlg.exec_button.setEnabled(True)
+
 
     def stat_analysis_checkBox_changed(self, state):
         if state == Qt.Checked:
