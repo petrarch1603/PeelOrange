@@ -6,7 +6,8 @@ from qgis.core import Qgis, \
                       QgsStyle, \
                       QgsGraduatedSymbolRenderer, \
                       QgsClassificationEqualInterval, \
-                      QgsMessageLog
+                      QgsMessageLog, \
+                      QgsLayerMetadata
 
 
 def resolve_path(name, basepath=None):
@@ -65,3 +66,11 @@ def post_log_message(msg: str) -> None:
     QgsMessageLog.logMessage(f"{msg}",
                              "Peel_Orange",
                              level=Qgis.Info)
+
+
+def add_metadata_to_layer(lyr, meta_str: str):
+    m = QgsLayerMetadata()
+    my_str = 'Created with Peel Orange\nhttps://github.com/petrarch1603/PeelOrange\n'
+    my_str += meta_str
+    m.setAbstract(my_str)
+    lyr.setMetadata(m)

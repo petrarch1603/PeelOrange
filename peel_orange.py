@@ -245,10 +245,13 @@ class PeelOrange:
         result = self.dlg.exec_()
         # See if OK was pressed
         if result:
-            # Do something useful here - delete the line containing pass and
-            # substitute with your code.
-            my_lyr = self.dlg.mLCB.currentLayer()
-            threshold = self.dlg.thresholdBox.cleanText()
+            # Store user selections as variables.
+            my_lyr: object = self.dlg.mLCB.currentLayer()
+            if self.do_thresh_flag is True:
+                threshold = float(self.dlg.thresholdBox.cleanText())
+            else:
+                threshold = 0
+
             # Add a log message
             post_log_message("Analysis beginning")
 
@@ -258,12 +261,14 @@ class PeelOrange:
             QgsProject.instance().addMapLayer(my_app.assigned_hex_grid, True)  # You can use false here to hide it
             # QgsProject.instance().addMapLayer(my_app.centroid_lyr, True)  # You can use false here to hide it
             if self.do_stat_analysis_flag:
-                stat_analysis = StatAnalysis(my_app.assigned_hex_grid)
+                stat_analysis = StatAnalysis(lyr=my_app.assigned_hex_grid, threshold=threshold)
                 my_dict = stat_analysis.get_stats_dict()
                 my_log = ""
                 for k, v in my_dict.items():
                     my_log += f"{k}: {v}\n"
                 post_log_message(my_log)
+                add_metadata_to_layer(lyr=my_app.assigned_hex_grid, meta_str=my_log)
+
                 # Show the results dialog
                 stat_analysis.create_plot(f"{my_lyr.name()}")
                 stat_analysis.show_plot()

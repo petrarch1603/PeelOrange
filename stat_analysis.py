@@ -7,11 +7,12 @@ from .peel_orange_functions import *
 
 
 class StatAnalysis:
-    def __init__(self, lyr):
+    def __init__(self, lyr: object, threshold: float):
         self.field_name = 'scale_dist'
         self.lyr = lyr
         self.data_list = self.get_data_list()
         self.stats_dict = self.get_stats_dict()
+        self.threshold = threshold
         self.dlg = DlgResults()
 
     def get_data_list(self):
@@ -41,7 +42,9 @@ class StatAnalysis:
         plt.axvline(x=self.stats_dict['mean'], ls="--", color='#2ca02c', alpha=0.95)
         plt.axvline(x=(self.stats_dict['mean'] - self.stats_dict['std']), ls="--", color='#2ca02c', alpha=0.25)
         plt.axvline(x=(self.stats_dict['mean'] + self.stats_dict['std']), ls="--", color='#2ca02c', alpha=0.25)
-        # TODO add threshold axvline
+        if self.threshold != 0:
+            plt.axvline(x=(1 + (self.threshold/100)), ls=":", color='#FFFF00', alpha=0.25)
+            plt.axvline(x=(1 - (self.threshold/100)), ls=":", color='#FFFF00', alpha=0.25)
         # TODO add labels to axvlines (see https://stackoverflow.com/questions/13413112/creating-labels-where-line-appears-in-matplotlib-figure)
         canvas = FigureCanvas(fig)
         self.dlg.lytMain.addWidget(canvas)
