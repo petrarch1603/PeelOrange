@@ -41,6 +41,7 @@ class StatAnalysis:
         plt.axvline(x=self.stats_dict['mean'], ls="--", color='#2ca02c', alpha=0.95)
         plt.axvline(x=(self.stats_dict['mean'] - self.stats_dict['std']), ls="--", color='#2ca02c', alpha=0.25)
         plt.axvline(x=(self.stats_dict['mean'] + self.stats_dict['std']), ls="--", color='#2ca02c', alpha=0.25)
+        # TODO add threshold axvline
         # TODO add labels to axvlines (see https://stackoverflow.com/questions/13413112/creating-labels-where-line-appears-in-matplotlib-figure)
         canvas = FigureCanvas(fig)
         self.dlg.lytMain.addWidget(canvas)
