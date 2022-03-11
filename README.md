@@ -13,22 +13,21 @@ The solution to this problem is to provide a tool that gives the cartographer an
 
 The process for visualizing the distortion is simple. This tool algorithmically creates a grid of points over a given region. The user can set the size of this region. It can be the size of multiple continents or of a neighborhood. Peel Orange blankets the region with a grid of about 10,000 simple points. 
 
-Before we go further though, it is important to understand that on projected coordinate systems geographic coordinates, i.e. latitude and longitude, are transformed into cartesian x,y coordinates. If you look into the documentation for these projections you'll see that they have map units such as meters or survey feet. 
+Before we go further though, it is important to understand how coordinate systems work. On projected coordinate systems geographic coordinates, i.e. latitude and longitude, are transformed into cartesian x, y coordinates. If you look into the documentation for these projections you'll see that they have map units such as meters or survey feet. 
 If we take one point on one of these projections it will have an x and y value. If we want to go north 500 meters we can just add 500 to the y value and that will give us a new point.  If we want to go south from the original point we just subtract 500 from y. 
 So what if we calculate the distance from that north point to that south point (on the ground), it should equal 1,000 meters, right? Well, actually it doesn't. In most cases it will be a bit longer than 1,000 meters. 
 
 # Why aren't scales true?
 
-This happens because the x and y coordinates get distorted when mapping a curved surface. It is an inescapable part of making maps. This distortion, though, is predictable and follows a pattern for any given projection. For each of those aforementioned grid points Peel Orange will calculate four supplementary points on each of the cardinal directions: north, south, east and west. Then, the distances between the north and south points are measured and same for the east and west. This is divided by the projected distance to give a scale factor. The side that has the greatest scale factor, be it north-south or east-west, will then be stored as a field in layer row of that point.
+This happens because the x and y coordinates get distorted when mapping a curved surface. It is an inescapable part of making maps. This distortion, though, is predictable and follows a pattern for any given projection. For each of those aforementioned grid points Peel Orange will calculate four supplementary points on each of the cardinal directions: north, south, east and west. Then, the distances between the north and south points are measured and same for the east and west. This is divided by the projected distance to give a scale factor. The side that has the greatest scale factor, be it north-south or east-west, will then be stored as a field in the layer row of that point.
 
 When this is performed over thousands of neatly spaces points across a region a pattern begins to form. Certain areas will have scale factors very close to 1.000. These points have the highest scale fidelity. As we move away from these regions though, the scale distortion will progressively get worse. Peel Orange visualizes this pattern in only a few moments. 
-
-on a given projection and calculates the scale factor at each of these points. The points are then used in making isolines that visualize the gradient of change in scale distortion over that region.
-
-This is useful for quickly comparing different projections in preparation for a new map project. OrangePeel can also provide a way of visualizing the changes in making custom projections.
-
 
 > No map projection shows scale correctly throughout the map, but there are usually one or more lines on the map along which the scale remains true. By choosing the locations of these lines properly, the scale errors elsewhere may be minimized, although some errors may still be large, depending on the size of the area being mapped and the projection. 
 
 <u>[Map Projections-A Working Manual](https://doi.org/10.3133/pp1395)</u> by John P. Snyder
+
+on a given projection and calculates the scale factor at each of these points. The points are then used in making isolines that visualize the gradient of change in scale distortion over that region.
+
+This is useful for quickly comparing different projections in preparation for a new map project. OrangePeel can also provide a way of visualizing the changes in making custom projections.
 
