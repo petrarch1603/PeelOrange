@@ -7,21 +7,21 @@ Peel Orange is a plugin that visualizes scale distortion on a map. The difficult
 
 # Introducing Peel Orange
 
-This tool doesn't solve the problem of distortion. Instead, it provides a framework for understanding where and how distortion happens. Some dilemmas in choosing a map projection are not satisfactorily resolved because there is no easy way to check the fidelity of a given projection. Many cartographers rely on their own sense of feeling in choosing a projection. This is a flawed process because this sense is driven by preconceptions that are themselves based on popular misunderstandings.  
+This tool doesn't solve the problem of distortion. Instead, it provides a framework for understanding where and how distortion happens. Many of the dilemmas in choosing a map projection are not satisfactorily resolved because there is no easy way to check the fidelity of a given projection. Cartographers often rely on their own sense of feeling in choosing a projection. This is a flawed process because this sense is driven by preconceptions that are themselves based on popular misunderstandings.  
 
 The solution to this problem is to provide a tool that gives the cartographer an objective and falsifiable visualization of their map's distortion. In using this tool the cartographer can pit projections against each other and make an informed choice. 
 
-The process for visualizing the distortion is simple. This tool algorithmically creates a grid of points over a given region. The user can set the size of this region. It can be the size of multiple continents or of a neighborhood. The grid blankets the region about 10,000 simple points. 
+The process for visualizing the distortion is simple. This tool algorithmically creates a grid of points over a given region. The user can set the size of this region. It can be the size of multiple continents or of a neighborhood. Peel Orange blankets the region with a grid of about 10,000 simple points. 
 
-At each point a few simple calculations are made. It is important to understand that on projected coordinate systems geographic coordinates, i.e. latitude and longitude, are transformed into cartesian x,y coordinates. If you look into the documentation for these projections you'll see that they have map units such as meters or survey feet. 
+Before we go further though, it is important to understand that on projected coordinate systems geographic coordinates, i.e. latitude and longitude, are transformed into cartesian x,y coordinates. If you look into the documentation for these projections you'll see that they have map units such as meters or survey feet. 
 If we take one point on one of these projections it will have an x and y value. If we want to go north 500 meters we can just add 500 to the y value and that will give us a new point.  If we want to go south from the original point we just subtract 500 from y. 
 So what if we calculate the distance from that north point to that south point (on the ground), it should equal 1,000 meters, right? Well, actually it doesn't. In most cases it will be a bit longer than 1,000 meters. 
 
-# Why is this?
+# Why aren't scales true?
 
-This happens because the x and y coordinates get distorted when mapping a curved surface. It is an inescapable part of mapping the world. This distortion is predictable and follows a pattern for any given projection. For each of those aforementioned grid points Peel Orange will calculate four supplementary points on each of the cardinal points: north, south, east and west. Then the distances between the north and south points are measured and same for the east and west. This is divided by the projected distance to give a scale factor. The side that has the greatest scale factor, be it north-south or east-west, will then be stored as a field in the point's data.
+This happens because the x and y coordinates get distorted when mapping a curved surface. It is an inescapable part of making maps. This distortion, though, is predictable and follows a pattern for any given projection. For each of those aforementioned grid points Peel Orange will calculate four supplementary points on each of the cardinal directions: north, south, east and west. Then, the distances between the north and south points are measured and same for the east and west. This is divided by the projected distance to give a scale factor. The side that has the greatest scale factor, be it north-south or east-west, will then be stored as a field in layer row of that point.
 
-When this is performed over thousands of neatly spaces points across a region a pattern begins to form. Certain areas will have scale factors very close to 1.000. These points have the highest scale fidelity. As we move away from these regions though, the scale will progressively get worse. Peel Orange visualizes this pattern in only a few moments. 
+When this is performed over thousands of neatly spaces points across a region a pattern begins to form. Certain areas will have scale factors very close to 1.000. These points have the highest scale fidelity. As we move away from these regions though, the scale distortion will progressively get worse. Peel Orange visualizes this pattern in only a few moments. 
 
 on a given projection and calculates the scale factor at each of these points. The points are then used in making isolines that visualize the gradient of change in scale distortion over that region.
 
