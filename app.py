@@ -1,4 +1,5 @@
 from .peel_orange_functions import *
+from math import hypot
 import processing
 from qgis.core import QgsProcessing, \
     QgsCoordinateTransform, \
@@ -83,58 +84,69 @@ class App:
 
 # noinspection PyCallByClass,PyArgumentList
 class PeelPointObject:
-    def __init__(self, point, crs, armspan):
+    def __init__(self, point, grid_crs, armspan):
         """
         :type armspan: float, int - This is the span of distance both north/south and east/west from the point
         """
         self.point = point
-        self.crs = crs
-        self.armspan = int(armspan)
-        self.x = self.point.asPoint().x()
-        self.y = self.point.asPoint().y()
-        self.e_grid = QgsGeometry.fromPointXY(QgsPointXY(self.x + (self.armspan / 2), self.y))
-        self.w_grid = QgsGeometry.fromPointXY(QgsPointXY(self.x - (self.armspan / 2), self.y))
-        self.n_grid = QgsGeometry.fromPointXY(QgsPointXY(self.x, self.y + (self.armspan / 2)))
-        self.s_grid = QgsGeometry.fromPointXY(QgsPointXY(self.x, self.y - (self.armspan / 2)))
-        # try:
-        #     assert int(self.e_grid.asPoint().x()) - int(self.w_grid.asPoint().x()) == int(armspan)
-        #     assert int(self.n_grid.asPoint().y()) - int(self.s_grid.asPoint().y()) == int(armspan)
-        # except AssertionError as e:
-        #     print(self.e_grid.asPoint().x() - self.w_grid.asPoint().x())
-        #     print(self.n_grid.asPoint().y() - self.s_grid.asPoint().y())
-        #     print(e)
-        self.e_wgs = self.tr(self.e_grid)
-        self.w_wgs = self.tr(self.w_grid)
-        self.n_wgs = self.tr(self.n_grid)
-        self.s_wgs = self.tr(self.s_grid)
-        self.e_w_dist = self.wgs_dist(self.e_wgs, self.w_wgs)
-        self.n_s_dist = self.wgs_dist(self.n_wgs, self.s_wgs)
+        self.grid_crs = grid_crs
+        self.wgs_crs = QgsCoordinateReferenceSystem.fromEpsgId(epsg=4326)
+        self.armspan = 0.0003615119289149707  # This number is decimal degrees
+        # This is the old way of doing it
+        # self.x = self.point.asPoint().x()
+        # self.y = self.point.asPoint().y()
+        # self.e_grid = QgsGeometry.fromPointXY(QgsPointXY(self.x + (self.armspan / 2), self.y))
+        # self.w_grid = QgsGeometry.fromPointXY(QgsPointXY(self.x - (self.armspan / 2), self.y))
+        # self.n_grid = QgsGeometry.fromPointXY(QgsPointXY(self.x, self.y + (self.armspan / 2)))
+        # self.s_grid = QgsGeometry.fromPointXY(QgsPointXY(self.x, self.y - (self.armspan / 2)))
+        self.center_wgs = self.tr(source_crs=self.grid_crs, dest_crs=self.wgs_crs, my_point=self.point)
+        self.e_wgs = QgsGeometry.fromPointXY(QgsPointXY((self.center_wgs.asPoint().x() + self.armspan),
+                                                        self.center_wgs.asPoint().y()))
+        self.w_wgs = QgsGeometry.fromPointXY(QgsPointXY((self.center_wgs.asPoint().x() - self.armspan),
+                                                        self.center_wgs.asPoint().y()))
+        self.n_wgs = QgsGeometry.fromPointXY(QgsPointXY(self.center_wgs.asPoint().x(),
+                                                        (self.center_wgs.asPoint().y() + self.armspan)))
+        self.s_wgs = QgsGeometry.fromPointXY(QgsPointXY(self.center_wgs.asPoint().x(),
+                                                        (self.center_wgs.asPoint().y() - self.armspan)))
+        self.e_grid = self.tr(source_crs=self.wgs_crs, dest_crs=self.grid_crs, my_point=self.e_wgs)
+        self.w_grid = self.tr(source_crs=self.wgs_crs, dest_crs=self.grid_crs, my_point=self.w_wgs)
+        self.n_grid = self.tr(source_crs=self.wgs_crs, dest_crs=self.grid_crs, my_point=self.n_wgs)
+        self.s_grid = self.tr(source_crs=self.wgs_crs, dest_crs=self.grid_crs, my_point=self.s_wgs)
+        self.e_w_wgs_dist = self.wgs_dist(self.e_wgs, self.w_wgs)
+        self.n_s_wgs_dist = self.wgs_dist(self.n_wgs, self.s_wgs)
         # self.avg_dist = (self.e_w_dist + self.n_s_dist) / 2
-        self.scale_distortion = self.armspan / self.determine_greatest_delta()
+        self.n_s_grid_dist = self.pythag_dist(grid_point1=self.n_grid, grid_point2=self.s_grid)
+        self.e_w_grid_dist = self.pythag_dist(grid_point1=self.e_grid, grid_point2=self.w_grid)
+        self.h = self.n_s_grid_dist / self.n_s_wgs_dist
+        self.k = self.e_w_grid_dist / self.e_w_wgs_dist
+        self.scale_distortion = self.determine_greatest_delta()
 
-    def tr(self, grid_point):
-        my_tr = QgsCoordinateTransform(self.crs,
-                                       QgsCoordinateReferenceSystem.fromEpsgId(epsg=4326),
+    def tr(self, source_crs, dest_crs, my_point):
+        my_tr = QgsCoordinateTransform(source_crs,
+                                       dest_crs,
                                        QgsProject.instance())
-        wgs_point = QgsGeometry(grid_point)
-        wgs_point.transform(my_tr)
-        return wgs_point
+        new_point = QgsGeometry(my_point)
+        new_point.transform(my_tr)
+        return new_point
 
     def determine_greatest_delta(self):
         """
         Determine which distance departs from the armspan the most. This number is the
         greatest scale distortion for a given point.
         """
-        e_w_delta = abs(self.e_w_dist-self.armspan)
-        n_s_delta = abs(self.n_s_dist-self.armspan)
-        if e_w_delta > n_s_delta:
-            return self.e_w_dist
+        if abs(1-self.h) > abs(1-self.k):
+            return self.h
         else:
-            return self.n_s_dist
+            return self.k
 
     # noinspection PyCallByClass
     def wgs_dist(self, wgs_point1, wgs_point2):
         da = QgsDistanceArea()
-        da.setSourceCrs(QgsCoordinateReferenceSystem.fromEpsgId(epsg=4326), QgsProject.instance().transformContext())
+        da.setSourceCrs(self.wgs_crs, QgsProject.instance().transformContext())
         da.setEllipsoid("WGS84")
         return da.measureLine(wgs_point1.asPoint(), wgs_point2.asPoint())
+
+    def pythag_dist(self, grid_point1, grid_point2):
+        x_side = abs(grid_point1.asPoint().x() - grid_point2.asPoint().x())
+        y_side = abs(grid_point1.asPoint().y() - grid_point2.asPoint().y())
+        return hypot(x_side, y_side)
