@@ -281,6 +281,8 @@ class PeelOrange:
                 stat_analysis.show_plot()
 
     def mlcb_layerChanged(self, lyr):
+        if lyr is None:
+            return
         self.dlg.mLCB.setLayer(lyr)
         if self.dlg.mLCB.currentLayer().featureCount() == 0:
             self.dlg.warn_label.setText('Selected Layer Has No Features')
@@ -288,7 +290,6 @@ class PeelOrange:
         else:
             self.dlg.warn_label.setText('')
             self.dlg.exec_button.setEnabled(True)
-
 
     def stat_analysis_checkBox_changed(self, state):
         if state == Qt.Checked:
