@@ -23,7 +23,7 @@ class App:
         self.centroid_lyr = self.create_centroids()
         self.scales_list = self.add_scales_to_centroid()
         self.assigned_hex_grid = self.assign_scales_to_grid()
-        my_renderer = set_graduated_symbol(self.assigned_hex_grid)
+        my_renderer = set_graduated_symbol(self.assigned_hex_grid, threshold=self.threshold)
         print(my_renderer)
         self.assigned_hex_grid.setRenderer(my_renderer)
         self.assigned_hex_grid.reload()
