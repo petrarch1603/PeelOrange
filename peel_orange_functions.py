@@ -1,5 +1,6 @@
 import os
 import configparser
+from qgis.PyQt.QtCore import Qt
 from qgis.core import Qgis, \
                       QgsClassificationQuantile, \
                       QgsRendererRangeLabelFormat, \
@@ -7,7 +8,9 @@ from qgis.core import Qgis, \
                       QgsGraduatedSymbolRenderer, \
                       QgsClassificationEqualInterval, \
                       QgsMessageLog, \
-                      QgsLayerMetadata
+                      QgsProperty, \
+                      QgsLayerMetadata, \
+                      QgsSymbol
 
 
 def resolve_path(name, basepath=None):
@@ -39,23 +42,32 @@ def exclude_degrees_layers(layers: list) -> list:
     return excluded_list
 
 
-def set_graduated_symbol(lyr) -> QgsGraduatedSymbolRenderer:
-    ramp_name = 'Spectral'
+def set_graduated_symbol(lyr, num_classes=15) -> QgsGraduatedSymbolRenderer:
+    ramp_name = 'Greys' # This is a QGIS standard color ramp name
     value_field = 'abs_delta'
-    num_classes = 15
     classification_method = QgsClassificationQuantile()
+    # Set up label format
     my_format = QgsRendererRangeLabelFormat()
     my_format.setFormat("%1 - %2")
     my_format.setPrecision(3)
     my_format.setTrimTrailingZeroes(True)
-    default_style = QgsStyle().defaultStyle()  # might be some potential to tweak this later on
-    color_ramp = default_style.colorRamp(ramp_name)
 
+    # Set up the base symbol
+    default_style = QgsStyle().defaultStyle()
+    color_ramp = default_style.colorRamp(ramp_name)
+    base_symbol = QgsSymbol.defaultSymbol(lyr.geometryType())
+    base_symbol_layer = base_symbol.symbolLayer(0)
+    base_symbol_layer.setStrokeWidth(0.4)
+    ddp = QgsProperty.fromExpression("@symbol_color")  # This matches the pen color to the fill color (seamless)
+    base_symbol_layer.setDataDefinedProperty(base_symbol_layer.PropertyStrokeColor, ddp)
+
+    # Set up renderer
     renderer = QgsGraduatedSymbolRenderer()
+    renderer.setSourceSymbol(base_symbol)
     renderer.setClassAttribute(value_field)
     renderer.setClassificationMethod(classification_method)
     renderer.setLabelFormat(my_format)
-    # renderer.updateColorRamp(color_ramp)
+    renderer.updateColorRamp(color_ramp)
     renderer.updateClasses(vlayer=lyr,
                            mode=QgsGraduatedSymbolRenderer.Quantile,
                            nclasses=num_classes)
