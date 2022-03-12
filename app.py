@@ -67,7 +67,6 @@ class App:
                 my_abs_delta = abs(1-my_point.scale_distortion)
                 self.centroid_lyr.changeAttributeValue(f.id(), abs_field_idx, my_abs_delta)
                 my_scales_list.append(my_point.scale_distortion)
-        print(my_point.n_wgs)
         return my_scales_list
 
     def assign_scales_to_grid(self):
