@@ -254,7 +254,7 @@ class PeelOrange:
             # Store user selections as variables.
             my_lyr: object = self.dlg.mLCB.currentLayer()
             if self.do_thresh_flag is True:
-                threshold = float(self.dlg.thresholdBox.cleanText())
+                threshold = float(float(self.dlg.thresholdBox.cleanText())/100)
             else:
                 threshold = 0
 
@@ -263,9 +263,10 @@ class PeelOrange:
 
             # Run app
             my_app = App(my_lyr, threshold)
-
+            print(threshold)
             QgsProject.instance().addMapLayer(my_app.assigned_hex_grid, True)  # You can use false here to hide it
             # QgsProject.instance().addMapLayer(my_app.centroid_lyr, True)  # You can use false here to hide it
+            print(self.do_stat_analysis_flag)
             if self.do_stat_analysis_flag:
                 stat_analysis = StatAnalysis(lyr=my_app.assigned_hex_grid, threshold=threshold)
                 my_dict = stat_analysis.get_stats_dict()
