@@ -223,13 +223,7 @@ class PeelOrange:
             self.dlg.mLCB.setFilters(QgsMapLayerProxyModel.HasGeometry)
             self.dlg.mLCB.layerChanged.connect(self.mlcb_layerChanged)
 
-            # Handle Statistical Analysis Checkbox
-            if importlib.util.find_spec("numpy") is not None and \
-               importlib.util.find_spec("matplotlib", package='pyplot') is not None:
-                self.dlg.stat_analysis_checkBox.stateChanged.connect(self.stat_analysis_checkBox_changed)
-            else:
-                self.dlg.stat_analysis_checkBox.setEnabled(False)
-                self.dlg.label_requirement.setDisabled(True)
+            self.dlg.stat_analysis_checkBox.stateChanged.connect(self.stat_analysis_checkBox_changed)
 
             # Set up threshold
             self.dlg.thresholdBox.setDisabled(True)
