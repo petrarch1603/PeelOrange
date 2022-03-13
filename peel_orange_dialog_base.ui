@@ -156,24 +156,6 @@
     <pixmap>icon.png</pixmap>
    </property>
   </widget>
-  <widget class="QLabel" name="label_requirement">
-   <property name="geometry">
-    <rect>
-     <x>30</x>
-     <y>140</y>
-     <width>138</width>
-     <height>11</height>
-    </rect>
-   </property>
-   <property name="font">
-    <font>
-     <pointsize>9</pointsize>
-    </font>
-   </property>
-   <property name="text">
-    <string>Requires Numpy and Matplotlib</string>
-   </property>
-  </widget>
   <widget class="QCheckBox" name="stat_analysis_checkBox">
    <property name="geometry">
     <rect>
