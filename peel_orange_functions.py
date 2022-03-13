@@ -127,5 +127,6 @@ def disable_ranges(renderer, threshold):
 
     for index in my_delete_list:
         renderer.updateRangeRenderState(index, False)
-    renderer.updateRangeLowerValue((my_delete_list[-1]+1), threshold)
+    if len(my_delete_list) > 1:
+        renderer.updateRangeLowerValue((my_delete_list[-1]+1), threshold)
     return renderer
