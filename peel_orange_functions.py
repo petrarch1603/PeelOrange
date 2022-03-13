@@ -13,6 +13,8 @@ from qgis.core import Qgis, \
                       QgsLayerMetadata, \
                       QgsSymbol
 
+print(f"Version: {Qgis.version()}")
+
 
 def resolve_path(name, basepath=None):
     if not basepath:
