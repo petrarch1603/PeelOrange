@@ -213,14 +213,15 @@ class PeelOrange:
             #     self.dlg.button_box.setDisabled(True)
             # Set up and filter the layer combo box
             layers_list = list(QgsProject.instance().mapLayers().values())  # This could probably be more elegant
-            excluded_list = exclude_degrees_layers(layers=layers_list)
+            # excluded_list = exclude_layers_from_box(layers=layers_list, project_crs=QgsProject.instance().crs())
 
             # Set so Map Layer Combo Box Defaults to blank
             self.dlg.mLCB.setCurrentIndex(-1)
 
-            self.dlg.mLCB.setExceptedLayerList(excluded_list)
+            # self.dlg.mLCB.setExceptedLayerList(excluded_list)
             self.dlg.mLCB.setShowCrs(True)
             self.dlg.mLCB.setFilters(QgsMapLayerProxyModel.HasGeometry)
+            print(self.dlg.mLCB)
             self.dlg.mLCB.layerChanged.connect(self.mlcb_layerChanged)
 
             self.dlg.stat_analysis_checkBox.stateChanged.connect(self.stat_analysis_checkBox_changed)
@@ -236,6 +237,7 @@ class PeelOrange:
             version_no = meta_dict['version']
             self.dlg.version_label.setStyleSheet('color: light-gray')
             self.dlg.version_label.setText(f"Version {version_no}")
+            self.dlg.warn_label.setStyleSheet('color: red')
 
         # show the dialog
         self.dlg.show()
@@ -279,6 +281,13 @@ class PeelOrange:
         self.dlg.mLCB.setLayer(lyr)
         if self.dlg.mLCB.currentLayer().featureCount() == 0:
             self.dlg.warn_label.setText('Selected Layer Has No Features')
+            self.dlg.exec_button.setEnabled(False)
+            print('no features')
+        elif self.dlg.mLCB.currentLayer().geometryType() == 0 and self.dlg.mLCB.currentLayer().featureCount() < 2:
+            self.dlg.warn_label.setText('Selected Layer is a Point Layer and does not have enough features')
+            self.dlg.exec_button.setEnabled(False)
+        elif self.dlg.mLCB.currentLayer().crs() != QgsProject.instance().crs():
+            self.dlg.warn_label.setText('Selected Layer is not on the same CRS as the project.')
             self.dlg.exec_button.setEnabled(False)
         else:
             self.dlg.warn_label.setText('')
