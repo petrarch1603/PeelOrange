@@ -6,7 +6,7 @@
 name=Peel Orange Scale Distortion Visualizer
 qgisMinimumVersion=3.0
 description=This plugin visualizes the scale distortion for a given region
-version=0.8
+version=0.9
 author=Patrick McGranaghan
 email=ptmcgra@yahoo.com
 
