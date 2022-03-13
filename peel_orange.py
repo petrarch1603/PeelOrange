@@ -243,8 +243,6 @@ class PeelOrange:
             self.dlg.version_label.setStyleSheet('color: light-gray')
             self.dlg.version_label.setText(f"Version {version_no}")
 
-
-
         # show the dialog
         self.dlg.show()
         # Run the dialog event loop
