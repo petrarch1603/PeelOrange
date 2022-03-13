@@ -255,10 +255,11 @@ class PeelOrange:
 
             # Run app
             my_app = App(my_lyr, threshold)
-            print(threshold)
             QgsProject.instance().addMapLayer(my_app.assigned_hex_grid, True)  # You can use false here to hide it
+            # TODO add option and handling for centroid points
             # QgsProject.instance().addMapLayer(my_app.centroid_lyr, True)  # You can use false here to hide it
-            print(self.do_stat_analysis_flag)
+
+            # Statistical Analysis Process
             if self.do_stat_analysis_flag:
                 stat_analysis = StatAnalysis(lyr=my_app.assigned_hex_grid, threshold=threshold)
                 my_dict = stat_analysis.get_stats_dict()
