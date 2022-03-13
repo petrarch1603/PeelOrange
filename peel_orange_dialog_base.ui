@@ -217,10 +217,10 @@
   <widget class="QLabel" name="warn_label">
    <property name="geometry">
     <rect>
-     <x>340</x>
-     <y>300</y>
-     <width>171</width>
-     <height>16</height>
+     <x>320</x>
+     <y>275</y>
+     <width>191</width>
+     <height>41</height>
     </rect>
    </property>
    <property name="font">
@@ -229,7 +229,7 @@
     </font>
    </property>
    <property name="layoutDirection">
-    <enum>Qt::LeftToRight</enum>
+    <enum>Qt::RightToLeft</enum>
    </property>
    <property name="text">
     <string>Selected Layer Must Have Features</string>
@@ -238,7 +238,7 @@
     <set>Qt::AlignCenter</set>
    </property>
    <property name="wordWrap">
-    <bool>false</bool>
+    <bool>true</bool>
    </property>
   </widget>
  </widget>
