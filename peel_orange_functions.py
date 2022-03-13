@@ -9,6 +9,7 @@ from qgis.core import Qgis, \
                       QgsGraduatedSymbolRenderer, \
                       QgsClassificationEqualInterval, \
                       QgsMessageLog, \
+                      QgsRendererRange, \
                       QgsProperty, \
                       QgsLayerMetadata, \
                       QgsSymbol
@@ -49,9 +50,8 @@ def exclude_layers_from_box(layers: list, project_crs: object) -> list:
 
 def set_graduated_symbol(lyr, num_classes=15, threshold=0) -> QgsGraduatedSymbolRenderer:
     value_field = 'abs_delta'
-    classification_method = QgsClassificationQuantile()
     # Set up label format
-    my_format = QgsRendererRangeLabelFormat()
+    my_format = QgsRendererRangeLabelFormat()  # TODO Deprecation warning, need to update this code
     my_format.setFormat("%1 - %2")
     my_format.setPrecision(3)
     my_format.setTrimTrailingZeroes(True)
@@ -74,7 +74,19 @@ def set_graduated_symbol(lyr, num_classes=15, threshold=0) -> QgsGraduatedSymbol
     # base_symbol_layer.setPaintEffect(my_blur)
 
     # Set up renderer
+    classification_method = QgsClassificationQuantile()
+    class_ranges_list = classification_method.classes(layer=lyr, expression=value_field, nclasses=num_classes)
+    print(f"Class List: {class_ranges_list}")
     renderer = QgsGraduatedSymbolRenderer()
+    # for i in class_ranges_list:  # See https://github.com/qgis/QGIS/issues/47761
+    #     print(f"this range is {i}")
+    #     try:
+    #         j = QgsRendererRange(i)
+    #         renderer.addClassRange(j)
+    #     except TypeError:
+    #         print(i.lowerBound())
+    #         renderer.addClassLowerUpper(lower=float(i.lowerBound()), upper=float(i.upperBound()))
+
     renderer.setSourceSymbol(base_symbol)
     renderer.setClassAttribute(value_field)
     renderer.setClassificationMethod(classification_method)
@@ -82,7 +94,7 @@ def set_graduated_symbol(lyr, num_classes=15, threshold=0) -> QgsGraduatedSymbol
     renderer.updateColorRamp(color_ramp)
     renderer.updateClasses(vlayer=lyr,
                            mode=QgsGraduatedSymbolRenderer.Quantile,
-                           nclasses=num_classes)
+                           nclasses=num_classes)  # TODO Deprecation warning, need to update this code
     if threshold != 0:
         renderer = disable_ranges(renderer, threshold)
     # Disable values below threshold
