@@ -170,8 +170,7 @@ class PeelOrange:
 
     def initGui(self):
         """Create the menu entries and toolbar icons inside the QGIS GUI."""
-
-        icon_path = ':/plugins/peel_orange/icon.png'
+        icon_path = resolve_path(':/plugins/peel_orange/icon.png')
         self.add_action(
             icon_path,
             text=self.tr(u'PeelOrange - Scale Distortion Visualizer'),
@@ -206,6 +205,8 @@ class PeelOrange:
                 return
             self.first_start = False
             self.dlg = PeelOrangeDialog()
+            banner_pix = QPixmap(resolve_path("img/PeelOrange-dialog-banner01.png"))
+            self.dlg.title_label.setPixmap(banner_pix)
             self.dlg.warn_label.setText('')
             # Ensure that CRS is a projected coordinate system
             # if QgsProject.instance().crs().mapUnits():
