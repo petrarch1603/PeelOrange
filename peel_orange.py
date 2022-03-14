@@ -25,7 +25,7 @@ import importlib
 import pyproj
 from qgis.PyQt.QtCore import Qt
 from qgis.PyQt.QtCore import QSettings, QTranslator, QCoreApplication
-from qgis.PyQt.QtGui import QIcon
+from qgis.PyQt.QtGui import QIcon, QPixmap
 from qgis.PyQt.QtWidgets import QAction, QMessageBox, QGraphicsScene
 from qgis.core import QgsMapLayerProxyModel
 
@@ -282,7 +282,6 @@ class PeelOrange:
         if self.dlg.mLCB.currentLayer().featureCount() == 0:
             self.dlg.warn_label.setText('Selected Layer Has No Features')
             self.dlg.exec_button.setEnabled(False)
-            print('no features')
         elif self.dlg.mLCB.currentLayer().geometryType() == 0 and self.dlg.mLCB.currentLayer().featureCount() < 2:
             self.dlg.warn_label.setText('Selected Layer is a Point Layer and does not have enough features')
             self.dlg.exec_button.setEnabled(False)
@@ -296,11 +295,23 @@ class PeelOrange:
     def stat_analysis_checkBox_changed(self, state):
         if state == Qt.Checked:
             self.do_stat_analysis_flag = True
+            stat_pix = QPixmap(resolve_path("img/stat_img_clean.png"))
+            self.dlg.stat_analysis_img.setPixmap(stat_pix)
+        else:
+            self.do_stat_analysis_flag = False
+            stat_pix = QPixmap(resolve_path("img/stat_img_blur.png"))
+            self.dlg.stat_analysis_img.setPixmap(stat_pix)
 
     def thresh_checkBox_changed(self, state):
         if state == Qt.Checked:
             self.do_thresh_flag = True
             self.dlg.thresholdBox.setDisabled(False)
+            thresh_pix = QPixmap(resolve_path("img/w-thresh.png"))
+            self.dlg.threshold_img.setPixmap(thresh_pix)
+            print(f"Is the pic null? {thresh_pix.isNull()}")
         else:
             self.do_thresh_flag = False
             self.dlg.thresholdBox.setDisabled(True)
+            thresh_pix = QPixmap(resolve_path("img/no-thresh.png"))
+            self.dlg.threshold_img.setPixmap(thresh_pix)
+            print('change no-thresh')
