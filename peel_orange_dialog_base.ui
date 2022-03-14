@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>521</width>
-    <height>308</height>
+    <height>541</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -16,8 +16,8 @@
   <widget class="QDialogButtonBox" name="exec_button">
    <property name="geometry">
     <rect>
-     <x>340</x>
-     <y>235</y>
+     <x>330</x>
+     <y>480</y>
      <width>171</width>
      <height>32</height>
     </rect>
@@ -63,8 +63,8 @@
   <widget class="QgsMapLayerComboBox" name="mLCB">
    <property name="geometry">
     <rect>
-     <x>140</x>
-     <y>135</y>
+     <x>130</x>
+     <y>140</y>
      <width>371</width>
      <height>32</height>
     </rect>
@@ -76,8 +76,8 @@
   <widget class="QLabel" name="region_layer_label">
    <property name="geometry">
     <rect>
-     <x>40</x>
-     <y>125</y>
+     <x>30</x>
+     <y>135</y>
      <width>101</width>
      <height>41</height>
     </rect>
@@ -100,8 +100,8 @@
   <widget class="QDoubleSpinBox" name="thresholdBox">
    <property name="geometry">
     <rect>
-     <x>140</x>
-     <y>175</y>
+     <x>410</x>
+     <y>190</y>
      <width>62</width>
      <height>22</height>
     </rect>
@@ -125,8 +125,8 @@
   <widget class="QLabel" name="version_label">
    <property name="geometry">
     <rect>
-     <x>20</x>
-     <y>275</y>
+     <x>10</x>
+     <y>510</y>
      <width>101</width>
      <height>16</height>
     </rect>
@@ -143,8 +143,8 @@
   <widget class="QLabel" name="attribution_label">
    <property name="geometry">
     <rect>
-     <x>340</x>
-     <y>275</y>
+     <x>330</x>
+     <y>510</y>
      <width>181</width>
      <height>20</height>
     </rect>
@@ -157,13 +157,16 @@
    <property name="text">
     <string>Created by Patrick McGranaghan 2022</string>
    </property>
+   <property name="alignment">
+    <set>Qt::AlignCenter</set>
+   </property>
   </widget>
   <widget class="QCheckBox" name="stat_analysis_checkBox">
    <property name="geometry">
     <rect>
-     <x>30</x>
-     <y>205</y>
-     <width>154</width>
+     <x>50</x>
+     <y>190</y>
+     <width>151</width>
      <height>21</height>
     </rect>
    </property>
@@ -185,8 +188,8 @@
   <widget class="QCheckBox" name="thresh_checkBox">
    <property name="geometry">
     <rect>
-     <x>30</x>
-     <y>175</y>
+     <x>300</x>
+     <y>190</y>
      <width>90</width>
      <height>20</height>
     </rect>
@@ -202,7 +205,7 @@
    <property name="geometry">
     <rect>
      <x>330</x>
-     <y>190</y>
+     <y>440</y>
      <width>191</width>
      <height>41</height>
     </rect>
@@ -223,6 +226,47 @@
    </property>
    <property name="wordWrap">
     <bool>true</bool>
+   </property>
+  </widget>
+  <widget class="QLabel" name="stat_analysis_img">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>220</y>
+     <width>241</width>
+     <height>231</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+   <property name="pixmap">
+    <pixmap>img/stat_img_blur.png</pixmap>
+   </property>
+   <property name="scaledContents">
+    <bool>false</bool>
+   </property>
+   <property name="alignment">
+    <set>Qt::AlignCenter</set>
+   </property>
+  </widget>
+  <widget class="QLabel" name="threshold_img">
+   <property name="geometry">
+    <rect>
+     <x>264</x>
+     <y>225</y>
+     <width>241</width>
+     <height>221</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+   <property name="pixmap">
+    <pixmap>img/no-thresh.png</pixmap>
+   </property>
+   <property name="alignment">
+    <set>Qt::AlignCenter</set>
    </property>
   </widget>
  </widget>
