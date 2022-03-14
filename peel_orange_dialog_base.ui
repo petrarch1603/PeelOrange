@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>521</width>
-    <height>541</height>
+    <width>577</width>
+    <height>567</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -16,8 +16,8 @@
   <widget class="QDialogButtonBox" name="exec_button">
    <property name="geometry">
     <rect>
-     <x>330</x>
-     <y>480</y>
+     <x>356</x>
+     <y>495</y>
      <width>171</width>
      <height>32</height>
     </rect>
@@ -32,8 +32,8 @@
   <widget class="QLabel" name="title_label">
    <property name="geometry">
     <rect>
-     <x>0</x>
-     <y>10</y>
+     <x>26</x>
+     <y>25</y>
      <width>521</width>
      <height>111</height>
     </rect>
@@ -63,8 +63,8 @@
   <widget class="QgsMapLayerComboBox" name="mLCB">
    <property name="geometry">
     <rect>
-     <x>130</x>
-     <y>140</y>
+     <x>156</x>
+     <y>155</y>
      <width>371</width>
      <height>32</height>
     </rect>
@@ -76,8 +76,8 @@
   <widget class="QLabel" name="region_layer_label">
    <property name="geometry">
     <rect>
-     <x>30</x>
-     <y>135</y>
+     <x>56</x>
+     <y>150</y>
      <width>101</width>
      <height>41</height>
     </rect>
@@ -100,8 +100,8 @@
   <widget class="QDoubleSpinBox" name="thresholdBox">
    <property name="geometry">
     <rect>
-     <x>410</x>
-     <y>190</y>
+     <x>436</x>
+     <y>205</y>
      <width>62</width>
      <height>22</height>
     </rect>
@@ -125,9 +125,9 @@
   <widget class="QLabel" name="version_label">
    <property name="geometry">
     <rect>
-     <x>10</x>
-     <y>510</y>
-     <width>101</width>
+     <x>36</x>
+     <y>525</y>
+     <width>141</width>
      <height>16</height>
     </rect>
    </property>
@@ -143,9 +143,9 @@
   <widget class="QLabel" name="attribution_label">
    <property name="geometry">
     <rect>
-     <x>330</x>
-     <y>510</y>
-     <width>181</width>
+     <x>306</x>
+     <y>525</y>
+     <width>231</width>
      <height>20</height>
     </rect>
    </property>
@@ -164,8 +164,8 @@
   <widget class="QCheckBox" name="stat_analysis_checkBox">
    <property name="geometry">
     <rect>
-     <x>50</x>
-     <y>190</y>
+     <x>76</x>
+     <y>205</y>
      <width>151</width>
      <height>21</height>
     </rect>
@@ -188,8 +188,8 @@
   <widget class="QCheckBox" name="thresh_checkBox">
    <property name="geometry">
     <rect>
-     <x>300</x>
-     <y>190</y>
+     <x>326</x>
+     <y>205</y>
      <width>90</width>
      <height>20</height>
     </rect>
@@ -204,9 +204,9 @@
   <widget class="QLabel" name="warn_label">
    <property name="geometry">
     <rect>
-     <x>330</x>
-     <y>440</y>
-     <width>191</width>
+     <x>326</x>
+     <y>455</y>
+     <width>221</width>
      <height>41</height>
     </rect>
    </property>
@@ -231,8 +231,8 @@
   <widget class="QLabel" name="stat_analysis_img">
    <property name="geometry">
     <rect>
-     <x>10</x>
-     <y>220</y>
+     <x>36</x>
+     <y>235</y>
      <width>241</width>
      <height>231</height>
     </rect>
@@ -253,8 +253,8 @@
   <widget class="QLabel" name="threshold_img">
    <property name="geometry">
     <rect>
-     <x>264</x>
-     <y>225</y>
+     <x>290</x>
+     <y>240</y>
      <width>241</width>
      <height>221</height>
     </rect>
