@@ -307,8 +307,11 @@ class PeelOrange:
             self.dlg.thresholdBox.setDisabled(False)
             thresh_pix = QPixmap(resolve_path("img/w-thresh.png"))
             self.dlg.threshold_img.setPixmap(thresh_pix)
+            self.dlg.threshold_img.setToolTip("With threshold checked the gradient is turned off in "
+                                              "areas that are below the threshold.")
         else:
             self.do_thresh_flag = False
             self.dlg.thresholdBox.setDisabled(True)
             thresh_pix = QPixmap(resolve_path("img/no-thresh.png"))
             self.dlg.threshold_img.setPixmap(thresh_pix)
+            self.dlg.threshold_img.setToolTip("Without threshold checked the gradient covers the entire bounding box.")

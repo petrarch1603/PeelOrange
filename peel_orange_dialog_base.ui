@@ -259,6 +259,9 @@
      <height>221</height>
     </rect>
    </property>
+   <property name="toolTip">
+    <string>Without threshold the gradient covers the entire bounding box</string>
+   </property>
    <property name="text">
     <string/>
    </property>
