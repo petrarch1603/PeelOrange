@@ -191,18 +191,17 @@ class PeelOrange:
     # noinspection PyTypeChecker,PyCallByClass
     def run(self):
         """Run method that performs all the real work"""
-
         # Create the dialog with elements (after translation) and keep reference
         # Only create GUI ONCE in callback, so that it will only load when the plugin is started
         if self.first_start:
             # Check that the CRS is a projected coordinate system
             if QgsProject.instance().crs().mapUnits() == 6:
-                print(QgsProject.instance().crs().mapUnits())
                 # QgsProject.messageBar().pushMessage("bad crs!")
                 warn_box = QMessageBox()
                 warn_box.setIcon(QMessageBox.Information)
                 warn_box.setText("Warning: project is using a geographic coordinate system.\n"
-                                 "Peel Orange only works on projected coordinate systems")
+                                 "Peel Orange only works on projected coordinate systems.")
+                post_log_message(f"Cannot handle project on {QgsProject.instance().crs()}")
                 warn_box.exec_()
                 return
             self.first_start = False
@@ -221,7 +220,6 @@ class PeelOrange:
             # self.dlg.mLCB.setExceptedLayerList(excluded_list)
             self.dlg.mLCB.setShowCrs(True)
             self.dlg.mLCB.setFilters(QgsMapLayerProxyModel.HasGeometry)
-            print(self.dlg.mLCB)
             self.dlg.mLCB.layerChanged.connect(self.mlcb_layerChanged)
 
             self.dlg.stat_analysis_checkBox.stateChanged.connect(self.stat_analysis_checkBox_changed)
@@ -245,6 +243,7 @@ class PeelOrange:
         result = self.dlg.exec_()
         # See if OK was pressed
         if result:
+            post_log_message(f"Qgis Version: {Qgis.version()}")
             # Store user selections as variables.
             my_lyr: object = self.dlg.mLCB.currentLayer()
             if self.do_thresh_flag is True:
@@ -308,10 +307,8 @@ class PeelOrange:
             self.dlg.thresholdBox.setDisabled(False)
             thresh_pix = QPixmap(resolve_path("img/w-thresh.png"))
             self.dlg.threshold_img.setPixmap(thresh_pix)
-            print(f"Is the pic null? {thresh_pix.isNull()}")
         else:
             self.do_thresh_flag = False
             self.dlg.thresholdBox.setDisabled(True)
             thresh_pix = QPixmap(resolve_path("img/no-thresh.png"))
             self.dlg.threshold_img.setPixmap(thresh_pix)
-            print('change no-thresh')

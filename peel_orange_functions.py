@@ -14,8 +14,6 @@ from qgis.core import Qgis, \
                       QgsLayerMetadata, \
                       QgsSymbol
 
-print(f"Version: {Qgis.version()}")
-
 
 def resolve_path(name, basepath=None):
     if not basepath:
@@ -76,15 +74,12 @@ def set_graduated_symbol(lyr, num_classes=15, threshold=0) -> QgsGraduatedSymbol
     # Set up renderer
     classification_method = QgsClassificationQuantile()
     class_ranges_list = classification_method.classes(layer=lyr, expression=value_field, nclasses=num_classes)
-    print(f"Class List: {class_ranges_list}")
     renderer = QgsGraduatedSymbolRenderer()
     # for i in class_ranges_list:  # See https://github.com/qgis/QGIS/issues/47761
-    #     print(f"this range is {i}")
     #     try:
     #         j = QgsRendererRange(i)
     #         renderer.addClassRange(j)
     #     except TypeError:
-    #         print(i.lowerBound())
     #         renderer.addClassLowerUpper(lower=float(i.lowerBound()), upper=float(i.upperBound()))
 
     renderer.setSourceSymbol(base_symbol)
