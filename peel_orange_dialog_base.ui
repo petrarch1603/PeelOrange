@@ -6,9 +6,27 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>577</width>
+    <width>580</width>
     <height>567</height>
    </rect>
+  </property>
+  <property name="sizePolicy">
+   <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+    <horstretch>0</horstretch>
+    <verstretch>0</verstretch>
+   </sizepolicy>
+  </property>
+  <property name="minimumSize">
+   <size>
+    <width>580</width>
+    <height>567</height>
+   </size>
+  </property>
+  <property name="maximumSize">
+   <size>
+    <width>580</width>
+    <height>567</height>
+   </size>
   </property>
   <property name="windowTitle">
    <string>Peel Orange Scale Distortion Visualizer</string>
@@ -84,14 +102,21 @@
    </property>
    <property name="font">
     <font>
+     <family>Futura</family>
      <pointsize>14</pointsize>
     </font>
    </property>
    <property name="toolTip">
     <string>Layer containing features to use as bounding box of analysis.</string>
    </property>
+   <property name="layoutDirection">
+    <enum>Qt::LeftToRight</enum>
+   </property>
    <property name="text">
     <string>Bounding Box Layer</string>
+   </property>
+   <property name="alignment">
+    <set>Qt::AlignCenter</set>
    </property>
    <property name="wordWrap">
     <bool>true</bool>
@@ -133,6 +158,7 @@
    </property>
    <property name="font">
     <font>
+     <family>Futura</family>
      <pointsize>9</pointsize>
     </font>
    </property>
@@ -143,14 +169,15 @@
   <widget class="QLabel" name="attribution_label">
    <property name="geometry">
     <rect>
-     <x>306</x>
-     <y>525</y>
+     <x>310</x>
+     <y>530</y>
      <width>231</width>
      <height>20</height>
     </rect>
    </property>
    <property name="font">
     <font>
+     <family>Futura</family>
      <pointsize>9</pointsize>
     </font>
    </property>
@@ -172,6 +199,7 @@
    </property>
    <property name="font">
     <font>
+     <family>Futura</family>
      <pointsize>14</pointsize>
     </font>
    </property>
@@ -193,6 +221,12 @@
      <width>90</width>
      <height>20</height>
     </rect>
+   </property>
+   <property name="font">
+    <font>
+     <family>Futura</family>
+     <pointsize>14</pointsize>
+    </font>
    </property>
    <property name="layoutDirection">
     <enum>Qt::RightToLeft</enum>
