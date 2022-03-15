@@ -208,9 +208,19 @@ class PeelOrange:
                 return
             self.first_start = False
             self.dlg = PeelOrangeDialog()
+
+            # Make sure images get set
             banner_pix = QPixmap(resolve_path("img/PeelOrange-dialog-banner01.png"))
             self.dlg.title_label.setPixmap(banner_pix)
+            stat_pix = QPixmap(resolve_path("img/stat_img_blur.png"))
+            self.dlg.stat_analysis_img.setPixmap(stat_pix)
+            self.dlg.threshold_img.setToolTip("With threshold checked the gradient is turned off in "
+                                              "areas that are below the threshold.")
+            thresh_pix = QPixmap(resolve_path("img/no-thresh.png"))
+            self.dlg.threshold_img.setPixmap(thresh_pix)
+            self.dlg.threshold_img.setToolTip("Without threshold checked the gradient covers the entire bounding box.")
             self.dlg.warn_label.setText('')
+
             # Ensure that CRS is a projected coordinate system
             # if QgsProject.instance().crs().mapUnits():
             #     self.dlg.button_box.setDisabled(True)
