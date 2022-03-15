@@ -46,7 +46,7 @@ from qgis.core import QgsMessageLog, Qgis, QgsProject
 class PeelOrange:
     """QGIS Plugin Implementation."""
 
-    def __init__(self, iface):
+    def __init__(self, iface, testing=False):
         """Constructor.
         :param iface: An interface instance that will be passed to this class
             which provides the hook by which you can manipulate the QGIS
@@ -55,6 +55,9 @@ class PeelOrange:
         """
         # Save reference to the QGIS interface
         self.iface = iface
+
+        # Set flag for testing
+        self.testing = testing
         # initialize plugin directory
         self.plugin_dir = os.path.dirname(__file__)
         # initialize locale
@@ -239,7 +242,8 @@ class PeelOrange:
             self.dlg.warn_label.setStyleSheet('color: red')
 
         # show the dialog
-        self.dlg.show()
+        if not self.testing:
+            self.dlg.show()
         # Run the dialog event loop
         result = self.dlg.exec_()
         # See if OK was pressed
