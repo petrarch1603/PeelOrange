@@ -14,11 +14,11 @@ __copyright__ = 'Copyright 2022, Patrick McGranaghan'
 
 import unittest
 
-from qgis.PyQt.QtGui import QDialogButtonBox, QDialog
+from qgis.PyQt.QtWidgets import QDialogButtonBox, QDialog
 
-from peel_orange_dialog import PeelOrangeDialog
+from peel_orange.peel_orange_dialog import PeelOrangeDialog
 
-from utilities import get_qgis_app
+from peel_orange.test.utilities import get_qgis_app
 QGIS_APP = get_qgis_app()
 
 
@@ -36,20 +36,21 @@ class PeelOrangeDialogTest(unittest.TestCase):
     def test_dialog_ok(self):
         """Test we can click OK."""
 
-        button = self.dialog.button_box.button(QDialogButtonBox.Ok)
+        button = self.dialog.exec_button.button(QDialogButtonBox.Ok)
         button.click()
         result = self.dialog.result()
         self.assertEqual(result, QDialog.Accepted)
 
     def test_dialog_cancel(self):
         """Test we can click cancel."""
-        button = self.dialog.button_box.button(QDialogButtonBox.Cancel)
+        button = self.dialog.exec_button.button(QDialogButtonBox.Cancel)
         button.click()
         result = self.dialog.result()
         self.assertEqual(result, QDialog.Rejected)
 
-if __name__ == "__main__":
+def run_test():
     suite = unittest.makeSuite(PeelOrangeDialogTest)
     runner = unittest.TextTestRunner(verbosity=2)
     runner.run(suite)
-
+    print('finish')
+run_test()
