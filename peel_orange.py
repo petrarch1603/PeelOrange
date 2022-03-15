@@ -221,6 +221,10 @@ class PeelOrange:
             self.dlg.threshold_img.setToolTip("Without threshold checked the gradient covers the entire bounding box.")
             self.dlg.warn_label.setText('')
 
+            # Disallow execution until a layer is chosen
+            self.dlg.warn_label.setText('Select a layer to continue')
+            self.dlg.exec_button.setEnabled(False)
+
             # Ensure that CRS is a projected coordinate system
             # if QgsProject.instance().crs().mapUnits():
             #     self.dlg.button_box.setDisabled(True)
