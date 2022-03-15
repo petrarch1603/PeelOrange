@@ -94,16 +94,16 @@
   <widget class="QLabel" name="region_layer_label">
    <property name="geometry">
     <rect>
-     <x>56</x>
+     <x>46</x>
      <y>150</y>
-     <width>101</width>
+     <width>111</width>
      <height>41</height>
     </rect>
    </property>
    <property name="font">
     <font>
      <family>Futura</family>
-     <pointsize>14</pointsize>
+     <pointsize>12</pointsize>
     </font>
    </property>
    <property name="toolTip">
@@ -125,8 +125,8 @@
   <widget class="QDoubleSpinBox" name="thresholdBox">
    <property name="geometry">
     <rect>
-     <x>436</x>
-     <y>205</y>
+     <x>461</x>
+     <y>200</y>
      <width>62</width>
      <height>22</height>
     </rect>
@@ -191,16 +191,16 @@
   <widget class="QCheckBox" name="stat_analysis_checkBox">
    <property name="geometry">
     <rect>
-     <x>76</x>
-     <y>205</y>
-     <width>151</width>
+     <x>40</x>
+     <y>200</y>
+     <width>221</width>
      <height>21</height>
     </rect>
    </property>
    <property name="font">
     <font>
      <family>Futura</family>
-     <pointsize>14</pointsize>
+     <pointsize>12</pointsize>
     </font>
    </property>
    <property name="toolTip">
@@ -216,16 +216,16 @@
   <widget class="QCheckBox" name="thresh_checkBox">
    <property name="geometry">
     <rect>
-     <x>326</x>
-     <y>205</y>
-     <width>90</width>
+     <x>300</x>
+     <y>200</y>
+     <width>141</width>
      <height>20</height>
     </rect>
    </property>
    <property name="font">
     <font>
      <family>Futura</family>
-     <pointsize>14</pointsize>
+     <pointsize>12</pointsize>
     </font>
    </property>
    <property name="layoutDirection">
