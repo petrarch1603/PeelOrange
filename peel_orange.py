@@ -212,44 +212,37 @@ class PeelOrange:
             # Make sure images get set
             banner_pix = QPixmap(resolve_path("img/PeelOrange-dialog-banner01.png"))
             self.dlg.title_label.setPixmap(banner_pix)
-            stat_pix = QPixmap(resolve_path("img/stat_img_blur.png"))
-            self.dlg.stat_analysis_img.setPixmap(stat_pix)
-            self.dlg.threshold_img.setToolTip("With threshold checked the gradient is turned off in "
-                                              "areas that are below the threshold.")
-            thresh_pix = QPixmap(resolve_path("img/no-thresh.png"))
-            self.dlg.threshold_img.setPixmap(thresh_pix)
-            self.dlg.threshold_img.setToolTip("Without threshold checked the gradient covers the entire bounding box.")
             self.dlg.warn_label.setText('')
+            self.dlg.mLCB.setShowCrs(True)
+
+            # # Set up Map Layer Combo Box
+            self.dlg.mLCB.setCurrentIndex(-1)  # Default to blank
+            self.dlg.mLCB.setShowCrs(True)
+            self.dlg.mLCB.setFilters(QgsMapLayerProxyModel.HasGeometry)
+            self.dlg.mLCB.layerChanged.connect(self.mlcb_layerChanged)  # Connect MapLayerComboBox to changes
 
             # Disallow execution until a layer is chosen
             self.dlg.warn_label.setText('Select a layer to continue')
             self.dlg.exec_button.setEnabled(False)
 
-            # Ensure that CRS is a projected coordinate system
-            # if QgsProject.instance().crs().mapUnits():
-            #     self.dlg.button_box.setDisabled(True)
-            # Set up and filter the layer combo box
-            layers_list = list(QgsProject.instance().mapLayers().values())  # This could probably be more elegant
-            # excluded_list = exclude_layers_from_box(layers=layers_list, project_crs=QgsProject.instance().crs())
-
-            # Set so Map Layer Combo Box Defaults to blank
-            self.dlg.mLCB.setCurrentIndex(-1)
-
-            # self.dlg.mLCB.setExceptedLayerList(excluded_list)
-            self.dlg.mLCB.setShowCrs(True)
-            self.dlg.mLCB.setFilters(QgsMapLayerProxyModel.HasGeometry)
-            self.dlg.mLCB.layerChanged.connect(self.mlcb_layerChanged)
-
+            # # Set up Stat Analysis Checkbox
+            stat_pix = QPixmap(resolve_path("img/stat_img_blur.png"))
+            self.dlg.stat_analysis_img.setPixmap(stat_pix)
+            self.dlg.threshold_img.setToolTip("With threshold checked the gradient is turned off in "
+                                              "areas that are below the threshold.")
             self.dlg.stat_analysis_checkBox.stateChanged.connect(self.stat_analysis_checkBox_changed)
 
-            # Set up threshold
+            # # Set up Threshold Checkbox
             self.dlg.thresholdBox.setDisabled(True)
             self.dlg.thresh_checkBox.setToolTip('Threshold is the amount of scale distortion tolerance to '
                                                 'visualize in the drawing')
+            thresh_pix = QPixmap(resolve_path("img/no-thresh.png"))
+            self.dlg.threshold_img.setPixmap(thresh_pix)
+            self.dlg.threshold_img.setToolTip("Without threshold checked the gradient covers the entire bounding box.")
             self.dlg.thresh_checkBox.stateChanged.connect(self.thresh_checkBox_changed)
 
-            # Get Metadata as a dictionary
-            meta_dict = read_metadata_txt('metadata.txt')
+            # Get Version Number
+            meta_dict = read_metadata_txt('metadata.txt') # Get Metadata as a dictionary
             version_no = meta_dict['version']
             self.dlg.version_label.setStyleSheet('color: light-gray')
             self.dlg.version_label.setText(f"Version {version_no}")
@@ -258,8 +251,10 @@ class PeelOrange:
         # show the dialog
         if not self.testing:
             self.dlg.show()
+
         # Run the dialog event loop
         result = self.dlg.exec_()
+
         # See if OK was pressed
         if result:
             post_log_message(f"Qgis Version: {Qgis.version()}")
@@ -273,11 +268,12 @@ class PeelOrange:
             # Add a log message
             post_log_message("Analysis beginning")
 
-            # Run app
+            # # Run app
             my_app = App(my_lyr, threshold)
             QgsProject.instance().addMapLayer(my_app.assigned_hex_grid, True)  # You can use false here to hide it
             # TODO add option and handling for centroid points
-            # QgsProject.instance().addMapLayer(my_app.centroid_lyr, True)  # You can use false here to hide it
+            if self.testing:
+                QgsProject.instance().addMapLayer(my_app.centroid_lyr, True)  # You can use false here to hide it
 
             # Statistical Analysis Process
             if self.do_stat_analysis_flag:
@@ -293,7 +289,7 @@ class PeelOrange:
                 stat_analysis.create_plot(f"{my_lyr.name()}")
                 stat_analysis.show_plot()
 
-    def mlcb_layerChanged(self, lyr):
+    def mlcb_layerChanged(self, lyr: object) -> None:
         if lyr is None:
             return
         self.dlg.mLCB.setLayer(lyr)
@@ -310,7 +306,7 @@ class PeelOrange:
             self.dlg.warn_label.setText('')
             self.dlg.exec_button.setEnabled(True)
 
-    def stat_analysis_checkBox_changed(self, state):
+    def stat_analysis_checkBox_changed(self, state: object) -> None:
         if state == Qt.Checked:
             self.do_stat_analysis_flag = True
             stat_pix = QPixmap(resolve_path("img/stat_img_clean.png"))
@@ -320,7 +316,7 @@ class PeelOrange:
             stat_pix = QPixmap(resolve_path("img/stat_img_blur.png"))
             self.dlg.stat_analysis_img.setPixmap(stat_pix)
 
-    def thresh_checkBox_changed(self, state):
+    def thresh_checkBox_changed(self, state: object) -> None:
         if state == Qt.Checked:
             self.do_thresh_flag = True
             self.dlg.thresholdBox.setDisabled(False)
