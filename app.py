@@ -18,22 +18,21 @@ class App:
     def __init__(self, lyr, threshold):
         self.lyr = lyr
         self.threshold = threshold
-        self.cell_size = self.get_cell_size(self.lyr)
+        self.cell_size = self.get_cell_size()  # Why did we past self.lyr here before?
         self.hex_grid = self.create_grid()
         self.centroid_lyr = self.create_centroids()
         self.scales_list = self.add_scales_to_centroid()
         self.assigned_hex_grid = self.assign_scales_to_grid()
-        my_renderer = set_graduated_symbol(self.assigned_hex_grid, threshold=self.threshold)
-        print(my_renderer)
-        self.assigned_hex_grid.setRenderer(my_renderer)
+        self.my_renderer = set_graduated_symbol(self.assigned_hex_grid, threshold=self.threshold)
+        self.assigned_hex_grid.setRenderer(self.my_renderer)
         self.assigned_hex_grid.reload()
 
-    def get_cell_size(self, divisible=100):
+    def get_cell_size(self) -> int:
         # Get shorter distance of sides of extent
         my_min = min(self.lyr.extent().width(), self.lyr.extent().height())
         return int(my_min / 100)
 
-    def create_grid(self):
+    def create_grid(self) -> object:
         hex_dict = {'CRS': self.lyr.crs(),
                     'EXTENT': self.lyr.extent(),
                     'HOVERLAY': 0,
@@ -44,7 +43,7 @@ class App:
                     'VSPACING': self.cell_size}
         return processing.run('native:creategrid', hex_dict)['OUTPUT']
 
-    def create_centroids(self):
+    def create_centroids(self) -> object:
         centroid_dict = {'ALL_PARTS': True,
                          'INPUT': self.hex_grid,
                          'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT}
@@ -56,34 +55,43 @@ class App:
         centroid_lyr.updateFields()
         return centroid_lyr
 
-    def add_scales_to_centroid(self):
+    def add_scales_to_centroid(self) -> list:
         scale_field_idx = self.centroid_lyr.fields().indexOf('scale_dist')
         abs_field_idx = self.centroid_lyr.fields().indexOf('abs_delta')
         my_scales_list = []
         with edit(self.centroid_lyr):
             for f in self.centroid_lyr.getFeatures():
-                my_point = PeelPointObject(f.geometry(), self.centroid_lyr.crs(), self.cell_size)
-                self.centroid_lyr.changeAttributeValue(f.id(), scale_field_idx, my_point.scale_distortion)
+                # Get scale distortion
+                my_point = PeelPointObject(point=f.geometry(),
+                                           grid_crs=self.centroid_lyr.crs(),
+                                           armspan=self.cell_size)
+                # Add Scale Distortion
+                self.centroid_lyr.changeAttributeValue(fid=f.id(),
+                                                       field=scale_field_idx,
+                                                       newValue=my_point.scale_distortion)
+                # Add Absolute Delta
                 my_abs_delta = abs(1-my_point.scale_distortion)
-                self.centroid_lyr.changeAttributeValue(f.id(), abs_field_idx, my_abs_delta)
+                self.centroid_lyr.changeAttributeValue(fid=f.id(),
+                                                       field=abs_field_idx,
+                                                       newValue=my_abs_delta)
                 my_scales_list.append(my_point.scale_distortion)
         return my_scales_list
 
-    def assign_scales_to_grid(self):
+    def assign_scales_to_grid(self) -> object:
         join_dict = {'DISCARD_NONMATCHING': True,
-             'INPUT': self.hex_grid,
-             'JOIN': self.centroid_lyr,
-             'JOIN_FIELDS': ['scale_dist', 'abs_delta'],
-             'METHOD': 1,
-             'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT,
-             'PREDICATE': [0, 1],
-             'PREFIX': ''}
+                     'INPUT': self.hex_grid,
+                     'JOIN': self.centroid_lyr,
+                     'JOIN_FIELDS': ['scale_dist', 'abs_delta'],
+                     'METHOD': 1,
+                     'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT,
+                     'PREDICATE': [0, 1],
+                     'PREFIX': ''}
         return processing.run('native:joinattributesbylocation', join_dict)['OUTPUT']
 
 
 # noinspection PyCallByClass,PyArgumentList
 class PeelPointObject:
-    def __init__(self, point, grid_crs, armspan):
+    def __init__(self, point: object, grid_crs: object, armspan: int):
         """
         :type armspan: float, int - This is the span of distance both north/south and east/west from the point
         """
