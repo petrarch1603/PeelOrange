@@ -3,36 +3,42 @@ from math import hypot
 import processing
 from qgis.core import QgsProcessing, \
     QgsCoordinateTransform, \
+    QgsFeature, \
     QgsField, \
     QgsDistanceArea, \
     QgsCoordinateReferenceSystem, \
     QgsGeometry, \
     QgsPointXY, \
     QgsProject, \
+    QgsVectorLayer, \
     edit
 
 from qgis.PyQt.QtCore import QVariant
 
 
 class App:
-    def __init__(self, lyr, threshold):
+    """ Main App Class"""
+    def __init__(self, lyr: QgsVectorLayer, threshold: int):
         self.lyr = lyr
         self.threshold = threshold
         self.cell_size = self.get_cell_size()  # Why did we past self.lyr here before?
         self.hex_grid = self.create_grid()
         self.centroid_lyr = self.create_centroids()
         self.scales_list = self.add_scales_to_centroid()
-        self.assigned_hex_grid = self.assign_scales_to_grid()
+        self.assigned_hex_grid: QgsVectorLayer = self.assign_scales_to_grid()
         self.my_renderer = set_graduated_symbol(self.assigned_hex_grid, threshold=self.threshold)
         self.assigned_hex_grid.setRenderer(self.my_renderer)
         self.assigned_hex_grid.reload()
 
     def get_cell_size(self) -> int:
+        """ Get Cell Size """
         # Get shorter distance of sides of extent
         my_min = min(self.lyr.extent().width(), self.lyr.extent().height())
         return int(my_min / 100)
 
     def create_grid(self) -> object:
+        """ Creates Grid
+        """
         hex_dict = {'CRS': self.lyr.crs(),
                     'EXTENT': self.lyr.extent(),
                     'HOVERLAY': 0,
@@ -43,7 +49,8 @@ class App:
                     'VSPACING': self.cell_size}
         return processing.run('native:creategrid', hex_dict)['OUTPUT']
 
-    def create_centroids(self) -> object:
+    def create_centroids(self) -> QgsVectorLayer:
+        """ Create Centroids Layer """
         centroid_dict = {'ALL_PARTS': True,
                          'INPUT': self.hex_grid,
                          'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT}
@@ -56,6 +63,7 @@ class App:
         return centroid_lyr
 
     def add_scales_to_centroid(self) -> list:
+        """ Adds scales to centroid layer"""
         scale_field_idx = self.centroid_lyr.fields().indexOf('scale_dist')
         abs_field_idx = self.centroid_lyr.fields().indexOf('abs_delta')
         my_scales_list = []
@@ -77,7 +85,8 @@ class App:
                 my_scales_list.append(my_point.scale_distortion)
         return my_scales_list
 
-    def assign_scales_to_grid(self) -> object:
+    def assign_scales_to_grid(self) -> QgsVectorLayer:
+        """ Assign scales to grid layer """
         join_dict = {'DISCARD_NONMATCHING': True,
                      'INPUT': self.hex_grid,
                      'JOIN': self.centroid_lyr,
@@ -89,9 +98,9 @@ class App:
         return processing.run('native:joinattributesbylocation', join_dict)['OUTPUT']
 
 
-# noinspection PyCallByClass,PyArgumentList
 class PeelPointObject:
-    def __init__(self, point: object, grid_crs: object, armspan: int):
+    """ Calculates the scale distortion of a given point """
+    def __init__(self, point: QgsFeature, grid_crs: QgsCoordinateReferenceSystem, armspan: int):
         """
         :type armspan: float, int - This is the span of distance both north/south and east/west from the point
         """
@@ -128,7 +137,11 @@ class PeelPointObject:
         self.k = self.e_w_grid_dist / self.e_w_wgs_dist
         self.scale_distortion = self.determine_greatest_delta()
 
-    def tr(self, source_crs, dest_crs, my_point):
+    def tr(self,
+           source_crs: QgsCoordinateReferenceSystem,
+           dest_crs: QgsCoordinateReferenceSystem,
+           my_point: QgsGeometry) -> QgsGeometry:
+        """ transform from source to destination """
         my_tr = QgsCoordinateTransform(source_crs,
                                        dest_crs,
                                        QgsProject.instance())
@@ -136,7 +149,7 @@ class PeelPointObject:
         new_point.transform(my_tr)
         return new_point
 
-    def determine_greatest_delta(self):
+    def determine_greatest_delta(self) -> float:
         """
         Determine which distance departs from the armspan the most. This number is the
         greatest scale distortion for a given point.
@@ -146,14 +159,15 @@ class PeelPointObject:
         else:
             return self.k
 
-    # noinspection PyCallByClass
     def wgs_dist(self, wgs_point1, wgs_point2):
+        """ Get Distance using Vincent's formula """
         da = QgsDistanceArea()
         da.setSourceCrs(self.wgs_crs, QgsProject.instance().transformContext())
         da.setEllipsoid("WGS84")
         return da.measureLine(wgs_point1.asPoint(), wgs_point2.asPoint())
 
     def pythag_dist(self, grid_point1, grid_point2):
+        """ Get Grid Distance using Pythagorean Theorem """
         x_side = abs(grid_point1.asPoint().x() - grid_point2.asPoint().x())
         y_side = abs(grid_point1.asPoint().y() - grid_point2.asPoint().y())
         return hypot(x_side, y_side)
