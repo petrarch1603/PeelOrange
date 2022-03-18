@@ -1,6 +1,6 @@
+"""Helper Functions"""
 import os
 import configparser
-from qgis.PyQt.QtCore import Qt
 from qgis.core import Qgis, \
                       QgsBlurEffect, \
                       QgsClassificationQuantile, \
@@ -15,19 +15,22 @@ from qgis.core import Qgis, \
                       QgsSymbol
 
 
-def resolve_path(name, basepath=None):
+def resolve_path(name: str, basepath=None):
+    """ resolves path for different operating systems"""
     if not basepath:
-      basepath = os.path.dirname(os.path.realpath(__file__))
+        basepath = os.path.dirname(os.path.realpath(__file__))
     return os.path.join(basepath, name)
 
 
 def get_file_path(filename: str) -> str:
+    """ gets a clean file path for use on different operating systems"""
     return os.path.abspath(os.path.join(
         os.path.dirname(__file__),
         filename))
 
 
 def read_metadata_txt(filename: str) -> dict:
+    """reads metadata text file and returns dictionary"""
     metadata = []
     parser = configparser.ConfigParser()
     parser.optionxform = str
@@ -37,6 +40,7 @@ def read_metadata_txt(filename: str) -> dict:
 
 
 def exclude_layers_from_box(layers: list, project_crs: object) -> list:
+    """Creates list of excluded layers"""
     excluded_list = []
     for l in layers:
         if l.crs().mapUnits() == 6:  # 6 is the unit type for degrees
@@ -47,6 +51,7 @@ def exclude_layers_from_box(layers: list, project_crs: object) -> list:
 
 
 def set_graduated_symbol(lyr, num_classes=15, threshold=0) -> QgsGraduatedSymbolRenderer:
+    """Creates Graduated Symbol for Layer"""
     value_field = 'abs_delta'
     # Set up label format
     my_format = QgsRendererRangeLabelFormat()  # TODO Deprecation warning, need to update this code
@@ -61,10 +66,10 @@ def set_graduated_symbol(lyr, num_classes=15, threshold=0) -> QgsGraduatedSymbol
     color_ramp = default_style.colorRamp(ramp_name)
 
     # Set up base symbol
-    base_symbol = QgsSymbol.defaultSymbol(lyr.geometryType())
+    base_symbol = QgsSymbol.defaultSymbol(geomType=lyr.geometryType())
     base_symbol_layer = base_symbol.symbolLayer(0)
     base_symbol_layer.setStrokeWidth(0.4)
-    ddp = QgsProperty.fromExpression("@symbol_color")  # This matches the pen color to the fill color (seamless)
+    ddp = QgsProperty.fromExpression(expression="@symbol_color")  # This matches the pen color to the fill color
     base_symbol_layer.setDataDefinedProperty(base_symbol_layer.PropertyStrokeColor, ddp)
 
     # # Add blur effect (this will only work on the base symbol)
@@ -73,7 +78,7 @@ def set_graduated_symbol(lyr, num_classes=15, threshold=0) -> QgsGraduatedSymbol
 
     # Set up renderer
     classification_method = QgsClassificationQuantile()
-    class_ranges_list = classification_method.classes(layer=lyr, expression=value_field, nclasses=num_classes)
+    # class_ranges_list = classification_method.classes(layer=lyr, expression=value_field, nclasses=num_classes)
     renderer = QgsGraduatedSymbolRenderer()
     # for i in class_ranges_list:  # See https://github.com/qgis/QGIS/issues/47761
     #     try:
@@ -99,13 +104,16 @@ def set_graduated_symbol(lyr, num_classes=15, threshold=0) -> QgsGraduatedSymbol
     return renderer
 
 
+# noinspection PyArgumentList
 def post_log_message(msg: str) -> None:
-    QgsMessageLog.logMessage(f"{msg}",
-                             "Peel_Orange",
+    """Post log message to Qgis terminal"""
+    QgsMessageLog.logMessage(message=f"{msg}",
+                             tag="Peel_Orange",
                              level=Qgis.Info)
 
 
 def add_metadata_to_layer(lyr, meta_str: str):
+    """Add metadata to layer"""
     m = QgsLayerMetadata()
     my_str = 'Created with Peel Orange\nhttps://github.com/petrarch1603/PeelOrange\n'
     my_str += meta_str
@@ -113,7 +121,8 @@ def add_metadata_to_layer(lyr, meta_str: str):
     lyr.setMetadata(m)
 
 
-def disable_ranges(renderer, threshold):
+def disable_ranges(renderer: QgsGraduatedSymbolRenderer, threshold: float) -> QgsGraduatedSymbolRenderer:
+    """Disable certain ranges below a threshold"""
     my_delete_list = []
     for index, element in enumerate(renderer.ranges()):
         if element.upperValue() < threshold:
