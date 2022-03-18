@@ -21,26 +21,20 @@
  *                                                                         *
  ***************************************************************************/
 """
-import importlib
-import pyproj
 from qgis.PyQt.QtCore import Qt
 from qgis.PyQt.QtCore import QSettings, QTranslator, QCoreApplication
 from qgis.PyQt.QtGui import QIcon, QPixmap
-from qgis.PyQt.QtWidgets import QAction, QMessageBox, QGraphicsScene
-from qgis.core import QgsMapLayerProxyModel
-
+from qgis.PyQt.QtWidgets import QAction, QMessageBox
+from qgis.core import QgsMapLayerProxyModel, QgsVectorLayer
 
 
 # Initialize Qt resources from file resources.py
-# from .resources import *
 # Import the code for the dialog
 from .peel_orange_dialog import PeelOrangeDialog
 import os.path
-# from .peel_orange_functions import *
-from .app import *
-from .stat_analysis import *
-from .peel_stat_results_dialog import DlgResults
-from qgis.core import QgsMessageLog, Qgis, QgsProject
+from .app import add_metadata_to_layer, App, post_log_message, read_metadata_txt, resolve_path
+from .stat_analysis import StatAnalysis
+from qgis.core import Qgis, QgsProject
 
 
 class PeelOrange:
@@ -81,6 +75,7 @@ class PeelOrange:
         self.first_start = None
         self.do_stat_analysis_flag = False
         self.do_thresh_flag = False
+        self.dlg = None
 
     # noinspection PyMethodMayBeStatic
     def tr(self, message):
@@ -243,7 +238,7 @@ class PeelOrange:
             self.dlg.thresh_checkBox.stateChanged.connect(self.thresh_checkBox_changed)
 
             # Get Version Number
-            meta_dict = read_metadata_txt('metadata.txt') # Get Metadata as a dictionary
+            meta_dict = read_metadata_txt('metadata.txt')  # Get Metadata as a dictionary
             version_no = meta_dict['version']
             self.dlg.version_label.setStyleSheet('color: light-gray')
             self.dlg.version_label.setText(f"Version {version_no}")
@@ -260,7 +255,7 @@ class PeelOrange:
         if result:
             post_log_message(f"Qgis Version: {Qgis.version()}")
             # Store user selections as variables.
-            my_lyr: object = self.dlg.mLCB.currentLayer()
+            my_lyr: QgsVectorLayer = self.dlg.mLCB.currentLayer()
             if self.do_thresh_flag is True:
                 threshold = float(float(self.dlg.thresholdBox.cleanText())/100)
             else:
@@ -290,7 +285,8 @@ class PeelOrange:
                 stat_analysis.create_plot(f"{my_lyr.name()}")
                 stat_analysis.show_plot()
 
-    def mlcb_layerChanged(self, lyr: object) -> None:
+    def mlcb_layerChanged(self, lyr: QgsVectorLayer) -> None:
+        """Action when layer is changed in combo box"""
         if lyr is None:
             return
         self.dlg.mLCB.setLayer(lyr)
@@ -308,6 +304,7 @@ class PeelOrange:
             self.dlg.exec_button.setEnabled(True)
 
     def stat_analysis_checkBox_changed(self, state: object) -> None:
+        """Action when stat analysis check box is checked"""
         if state == Qt.Checked:
             self.do_stat_analysis_flag = True
             stat_pix = QPixmap(resolve_path("img/stat_img_clean.png"))
@@ -318,6 +315,7 @@ class PeelOrange:
             self.dlg.stat_analysis_img.setPixmap(stat_pix)
 
     def thresh_checkBox_changed(self, state: object) -> None:
+        """Action when threshold check box is checked"""
         if state == Qt.Checked:
             self.do_thresh_flag = True
             self.dlg.thresholdBox.setDisabled(False)
