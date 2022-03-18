@@ -2,14 +2,11 @@
 import os
 import configparser
 from qgis.core import Qgis, \
-                      QgsBlurEffect, \
                       QgsClassificationQuantile, \
                       QgsRendererRangeLabelFormat, \
                       QgsStyle, \
                       QgsGraduatedSymbolRenderer, \
-                      QgsClassificationEqualInterval, \
                       QgsMessageLog, \
-                      QgsRendererRange, \
                       QgsProperty, \
                       QgsLayerMetadata, \
                       QgsSymbol
@@ -78,14 +75,8 @@ def set_graduated_symbol(lyr, num_classes=15, threshold=0) -> QgsGraduatedSymbol
 
     # Set up renderer
     classification_method = QgsClassificationQuantile()
-    # class_ranges_list = classification_method.classes(layer=lyr, expression=value_field, nclasses=num_classes)
     renderer = QgsGraduatedSymbolRenderer()
-    # for i in class_ranges_list:  # See https://github.com/qgis/QGIS/issues/47761
-    #     try:
-    #         j = QgsRendererRange(i)
-    #         renderer.addClassRange(j)
-    #     except TypeError:
-    #         renderer.addClassLowerUpper(lower=float(i.lowerBound()), upper=float(i.upperBound()))
+    # See https://github.com/qgis/QGIS/issues/47761
 
     renderer.setSourceSymbol(base_symbol)
     renderer.setClassAttribute(value_field)
