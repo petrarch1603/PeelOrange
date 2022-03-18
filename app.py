@@ -98,23 +98,15 @@ class App:
         return processing.run('native:joinattributesbylocation', join_dict)['OUTPUT']
 
 
+# noinspection PyArgumentList
 class PeelPointObject:
     """ Calculates the scale distortion of a given point """
     def __init__(self, point: QgsFeature, grid_crs: QgsCoordinateReferenceSystem, armspan: int):
-        """
-        :type armspan: float, int - This is the span of distance both north/south and east/west from the point
-        """
+        """ Initialize Object """
         self.point = point
         self.grid_crs = grid_crs
         self.wgs_crs = QgsCoordinateReferenceSystem.fromEpsgId(epsg=4326)
         self.armspan = 0.0003615119289149707  # This number is decimal degrees
-        # This is the old way of doing it
-        # self.x = self.point.asPoint().x()
-        # self.y = self.point.asPoint().y()
-        # self.e_grid = QgsGeometry.fromPointXY(QgsPointXY(self.x + (self.armspan / 2), self.y))
-        # self.w_grid = QgsGeometry.fromPointXY(QgsPointXY(self.x - (self.armspan / 2), self.y))
-        # self.n_grid = QgsGeometry.fromPointXY(QgsPointXY(self.x, self.y + (self.armspan / 2)))
-        # self.s_grid = QgsGeometry.fromPointXY(QgsPointXY(self.x, self.y - (self.armspan / 2)))
         self.center_wgs = self.tr(source_crs=self.grid_crs, dest_crs=self.wgs_crs, my_point=self.point)
         self.e_wgs = QgsGeometry.fromPointXY(QgsPointXY((self.center_wgs.asPoint().x() + self.armspan),
                                                         self.center_wgs.asPoint().y()))
@@ -130,15 +122,14 @@ class PeelPointObject:
         self.s_grid = self.tr(source_crs=self.wgs_crs, dest_crs=self.grid_crs, my_point=self.s_wgs)
         self.e_w_wgs_dist = self.wgs_dist(self.e_wgs, self.w_wgs)
         self.n_s_wgs_dist = self.wgs_dist(self.n_wgs, self.s_wgs)
-        # self.avg_dist = (self.e_w_dist + self.n_s_dist) / 2
         self.n_s_grid_dist = self.pythag_dist(grid_point1=self.n_grid, grid_point2=self.s_grid)
         self.e_w_grid_dist = self.pythag_dist(grid_point1=self.e_grid, grid_point2=self.w_grid)
         self.h = self.n_s_grid_dist / self.n_s_wgs_dist
         self.k = self.e_w_grid_dist / self.e_w_wgs_dist
         self.scale_distortion = self.determine_greatest_delta()
 
-    def tr(self,
-           source_crs: QgsCoordinateReferenceSystem,
+    @staticmethod
+    def tr(source_crs: QgsCoordinateReferenceSystem,
            dest_crs: QgsCoordinateReferenceSystem,
            my_point: QgsGeometry) -> QgsGeometry:
         """ transform from source to destination """
@@ -166,7 +157,8 @@ class PeelPointObject:
         da.setEllipsoid("WGS84")
         return da.measureLine(wgs_point1.asPoint(), wgs_point2.asPoint())
 
-    def pythag_dist(self, grid_point1, grid_point2):
+    @staticmethod
+    def pythag_dist(grid_point1, grid_point2):
         """ Get Grid Distance using Pythagorean Theorem """
         x_side = abs(grid_point1.asPoint().x() - grid_point2.asPoint().x())
         y_side = abs(grid_point1.asPoint().y() - grid_point2.asPoint().y())
