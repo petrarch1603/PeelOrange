@@ -12,7 +12,7 @@ from qgis.core import Qgis, \
                       QgsSymbol
 
 
-def resolve_path(name: str, basepath=None):
+def resolve_path(name: str, basepath=None) -> os.path:
     """ resolves path for different operating systems"""
     if not basepath:
         basepath = os.path.dirname(os.path.realpath(__file__))
