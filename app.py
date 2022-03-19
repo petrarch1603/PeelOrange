@@ -36,12 +36,12 @@ class App:
         # Get shorter distance of sides of extent
         if isinf(self.bbox_lyr.extent().area()):  # Check for bad geometry and fix it
             post_log_message("Error: layer geometry is bad, attempting to fix validity")
-            self.fix_validity(lyr=self.bbox_lyr)
+            self.fix_validity()
         print(self.bbox_lyr.extent().width())
         my_min = min(self.bbox_lyr.extent().width(), self.bbox_lyr.extent().height())
         return int(my_min / 100)
 
-    def fix_validity(self, lyr: QgsVectorLayer) -> QgsVectorLayer:
+    def fix_validity(self) -> None:
         """Fixes bad geometry"""
         c_v_dict = {'ERROR_OUTPUT': 'TEMPORARY_OUTPUT',
                     'IGNORE_RING_SELF_INTERSECTION': False,
