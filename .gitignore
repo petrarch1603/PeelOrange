@@ -138,3 +138,4 @@ dmypy.json
 .idea/inspectionProfiles/*.xml
 .idea/*.*
 .idea/inspectionProfiles/profiles_settings.xml
+.idea/
