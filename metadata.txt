@@ -6,11 +6,11 @@
 name=Peel Orange Scale Distortion Visualizer
 qgisMinimumVersion=3.0
 description=This plugin visualizes the scale distortion for a given region
-version=1.0.0
+version=1.0.1
 author=Patrick McGranaghan
 email=ptmcgra@yahoo.com
 
-about=OrangePeel is a plugin that visualizes the scale distortion on a given region on a given projection. This tool algorithmically creates a grid of points over a given region and calculates the scale factor at each of these points. The points are then used in making a heat map that visualize the gradient of change in scale distortion over that region.
+about=OrangePeel is a plugin that visualizes the scale distortion on a given region on a given projection. This tool algorithmically creates a grid of points over a given region and calculates the scale factor at each of these points. The points are then used in making a gradient map that visualize the gradient of change in scale distortion over that region.
 
 tracker=https://github.com/petrarch1603/PeelOrange/issues
 repository=https://github.com/petrarch1603/PeelOrange
