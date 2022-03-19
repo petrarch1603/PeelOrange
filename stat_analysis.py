@@ -40,7 +40,7 @@ class StatAnalysis:
         ax.set_title(f'{pretty_lyr_name} point scale distribution')
         ax.set_xlabel('Scale Distortion')
         ax.set_ylabel('Number of Points')
-        print(plt.hist(self.data_list, bins=50, density=False, alpha=0.6, color='b'))
+        # print(plt.hist(self.data_list, bins=50, density=False, alpha=0.6, color='b'))
 
         # Plot the average and standard deviations
         plt.axvline(x=self.stats_dict['mean'], ls="--", color='#2ca02c', alpha=0.95)
