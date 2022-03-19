@@ -134,4 +134,4 @@ dmypy.json
 .DS_Store
 .idea/.DS_Store
 .idea/sonarlint/
-.idea/
+.idea/*.xml
