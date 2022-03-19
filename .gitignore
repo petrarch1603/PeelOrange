@@ -136,3 +136,5 @@ dmypy.json
 .idea/sonarlint/
 .idea/*.xml
 .idea/inspectionProfiles/*.xml
+.idea/*.*
+.idea/inspectionProfiles/profiles_settings.xml
