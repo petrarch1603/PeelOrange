@@ -1,5 +1,5 @@
 from .peel_orange_functions import *
-from math import hypot
+from math import hypot, isinf
 import processing
 from qgis.core import QgsProcessing, \
     QgsCoordinateTransform, \
@@ -19,9 +19,10 @@ from qgis.PyQt.QtCore import QVariant
 class App:
     """ Main App Class"""
     def __init__(self, lyr: QgsVectorLayer, threshold: int):
-        self.lyr = lyr
+        self.bbox_lyr = lyr
         self.threshold = threshold
-        self.cell_size = self.get_cell_size()  # Why did we past self.lyr here before?
+        print(self.bbox_lyr.extent())
+        self.cell_size = self.get_cell_size()  # Why did we past self.bbox_lyr here before?
         self.hex_grid = self.create_grid()
         self.centroid_lyr = self.create_centroids()
         self.scales_list = self.add_scales_to_centroid()
@@ -33,14 +34,28 @@ class App:
     def get_cell_size(self) -> int:
         """ Get Cell Size """
         # Get shorter distance of sides of extent
-        my_min = min(self.lyr.extent().width(), self.lyr.extent().height())
+        if isinf(self.bbox_lyr.extent().area()):  # Check for bad geometry and fix it
+            post_log_message("Error: layer geometry is bad, attempting to fix validity")
+            self.fix_validity(lyr=self.bbox_lyr)
+        print(self.bbox_lyr.extent().width())
+        my_min = min(self.bbox_lyr.extent().width(), self.bbox_lyr.extent().height())
         return int(my_min / 100)
+
+    def fix_validity(self, lyr: QgsVectorLayer) -> QgsVectorLayer:
+        """Fixes bad geometry"""
+        c_v_dict = {'ERROR_OUTPUT': 'TEMPORARY_OUTPUT',
+                    'IGNORE_RING_SELF_INTERSECTION': False,
+                    'INPUT_LAYER': self.bbox_lyr,
+                    'INVALID_OUTPUT': 'TEMPORARY_OUTPUT',
+                    'METHOD': 2,
+                    'VALID_OUTPUT': 'TEMPORARY_OUTPUT'}
+        self.bbox_lyr = processing.run('qgis:checkvalidity', c_v_dict)['VALID_OUTPUT']
 
     def create_grid(self) -> object:
         """ Creates Grid
         """
-        hex_dict = {'CRS': self.lyr.crs(),
-                    'EXTENT': self.lyr.extent(),
+        hex_dict = {'CRS': self.bbox_lyr.crs(),
+                    'EXTENT': self.bbox_lyr.extent(),
                     'HOVERLAY': 0,
                     'HSPACING': self.cell_size,
                     'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT,
