@@ -19,9 +19,13 @@ from qgis.PyQt.QtCore import QVariant
 class App:
     """ Main App Class"""
     def __init__(self, lyr: QgsVectorLayer, threshold: int):
+
         self.bbox_lyr = lyr
         self.threshold = threshold
-        print(self.bbox_lyr.extent())
+        if self.bbox_lyr.crs().mapUnits() == 2:
+            self.unit_conversion = .3048
+        else:
+            self.unit_conversion = 1
         self.cell_size = self.get_cell_size()  # Why did we past self.bbox_lyr here before?
         self.hex_grid = self.create_grid()
         self.centroid_lyr = self.create_centroids()
@@ -37,7 +41,6 @@ class App:
         if isinf(self.bbox_lyr.extent().area()):  # Check for bad geometry and fix it
             post_log_message("Error: layer geometry is bad, attempting to fix validity")
             self.fix_validity()
-        print(self.bbox_lyr.extent().width())
         my_min = min(self.bbox_lyr.extent().width(), self.bbox_lyr.extent().height())
         return int(my_min / 100)
 
@@ -87,7 +90,8 @@ class App:
                 # Get scale distortion
                 my_point = PeelPointObject(point=f.geometry(),
                                            grid_crs=self.centroid_lyr.crs(),
-                                           armspan=self.cell_size)
+                                           unit_conversion=self.unit_conversion
+                                           )
                 # Add Scale Distortion
                 self.centroid_lyr.changeAttributeValue(fid=f.id(),
                                                        field=scale_field_idx,
@@ -116,12 +120,17 @@ class App:
 # noinspection PyArgumentList
 class PeelPointObject:
     """ Calculates the scale distortion of a given point """
-    def __init__(self, point: QgsFeature, grid_crs: QgsCoordinateReferenceSystem, armspan: int):
+    def __init__(self,
+                 point: QgsFeature,
+                 grid_crs: QgsCoordinateReferenceSystem,
+                 unit_conversion: float):
         """ Initialize Object """
         self.point = point
         self.grid_crs = grid_crs
         self.wgs_crs = QgsCoordinateReferenceSystem.fromEpsgId(epsg=4326)
         self.armspan = 0.0003615119289149707  # This number is decimal degrees
+        self.unit_conversion = unit_conversion
+
         self.center_wgs = self.tr(source_crs=self.grid_crs, dest_crs=self.wgs_crs, my_point=self.point)
         self.e_wgs = QgsGeometry.fromPointXY(QgsPointXY((self.center_wgs.asPoint().x() + self.armspan),
                                                         self.center_wgs.asPoint().y()))
@@ -137,8 +146,8 @@ class PeelPointObject:
         self.s_grid = self.tr(source_crs=self.wgs_crs, dest_crs=self.grid_crs, my_point=self.s_wgs)
         self.e_w_wgs_dist = self.wgs_dist(self.e_wgs, self.w_wgs)
         self.n_s_wgs_dist = self.wgs_dist(self.n_wgs, self.s_wgs)
-        self.n_s_grid_dist = self.pythag_dist(grid_point1=self.n_grid, grid_point2=self.s_grid)
-        self.e_w_grid_dist = self.pythag_dist(grid_point1=self.e_grid, grid_point2=self.w_grid)
+        self.n_s_grid_dist = self.pythag_dist(grid_point1=self.n_grid, grid_point2=self.s_grid)*self.unit_conversion
+        self.e_w_grid_dist = self.pythag_dist(grid_point1=self.e_grid, grid_point2=self.w_grid)*self.unit_conversion
         self.h = self.n_s_grid_dist / self.n_s_wgs_dist
         self.k = self.e_w_grid_dist / self.e_w_wgs_dist
         self.scale_distortion = self.determine_greatest_delta()
