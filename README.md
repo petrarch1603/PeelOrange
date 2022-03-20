@@ -11,10 +11,10 @@ Repository](https://plugins.qgis.org/plugins/). Start QGIS3, go to the Plugins m
 * Clone or download the Peel Orange GitHub repository
 * Copy `PeelOrange-main` to `python/plugins/` in the current active
   profile, the location of which can be found from within QGIS3 by
-  going to 'Settings &rarr; User Profiles &rarr; Open Active Profile
-  Folder' (\*)
-* Enable the plugin in QGIS3 by going to 'Plugins &rarr; Manage and
-  Install Plugins...' and find Peel Orange (may require restarting QGIS3)
+  going to `Settings` &rarr; `User Profiles` &rarr; `Open Active Profile
+  Folder`
+* Enable the plugin in QGIS3 by going to `Plugins` &rarr; `Manage and
+  Install Plugins` and find Peel Orange (may require restarting QGIS3)
 
 # Introducing Peel Orange
 
@@ -43,12 +43,23 @@ When this is performed over thousands of neatly spaces points across a region a 
 <u>[Map Projections-A Working Manual](https://doi.org/10.3133/pp1395)</u> by John P. Snyder
 
 ## Peel Orange is easy to use
+To run Peel Orange go to the `Plugins` dropdown menu and click on `Peel Orange Scale Distortion Visualizer`.
+
+![dialog_example](/img/dialog_example.png)
+
+First select a layer to use as the bounding box for Peel Orange analysis. This layer must be on the same projection as the project projection. Additionally this projection cannot use a geographic coordinate system (i.e. using degrees as distant units, should be meters or feet instead). This layer must have enough features to use as a rectangular bounding box. 
+
+If you do not have such a layer, creating one is easy. Create a temporary scratch layer by going to the `Layer` pulldown menu &rarr; `New Temporary Scratch Layer`. Select Polygon `Geometry Type` and make sure the projection is the same as the project. 
+
+Next go to the `Edit` pulldown menu and select `Add Rectangle` to draw a rectangle on the map. Now you can use this layer as your bounding box. 
+
+### Statistical Analysis
+This option plots a statistical distribution of scale distortions. The ideal projection will have a concentration of points that are close to 1.00. The further the numbers are from 1.00 the more distortion there is in the map.
 
 
-
-## Thresholds
-Every time Peel Orange is run it creates a dynamically calculated range of scale distortion values. Because of this it is not convenient to compare gradients from one projection to another. To mitigate this the Threshold feature was introduced.
+### Thresholds
 <img align="right" width="217" height="219" src="/img/legend_thres_off.png">
+Every time Peel Orange is executed it creates a dynamically calculated range of scale distortion values. Because of this it is not convenient to compare gradients from one projection to another. To mitigate this the Threshold feature was introduced.
 
 The threshold value represents a percentage of scale distortion that is an acceptable tolerance to the mapmaker. When Peel Orange finishes its calculations the regions that are below the threshold will be turned off in the legend. 
 
