@@ -70,7 +70,7 @@ The threshold value represents a percentage of scale distortion that is an accep
 ## Understanding the results
 
 <p align="center">
-  <img width="516" height="256" src="/img/understanding_results.png">
+  <img width="774" height="385" src="/img/understanding_results.png">
 </p>
 
 Peel Orange creates a new hex grid layer. The layer styling is graduated with reference to the absolute delta of the scale distortion. That number represents the delta from 1.00. For example a scale distortion with a value of 1.02 will have an absolute delta of 0.02. The lower this number the closer its fidelity is to the scale on the Earth. A color ramp is automatically created with white representing lower distortion and black representing higher distortion. This color ramp and the number of classes can be fine-tuned after Peel Orange is executed.   
