@@ -42,8 +42,19 @@ When this is performed over thousands of neatly spaces points across a region a 
 
 <u>[Map Projections-A Working Manual](https://doi.org/10.3133/pp1395)</u> by John P. Snyder
 
+## Peel Orange is easy to use
+
+
+
 ## Thresholds
-Every time Peel Orange is run it creates a dynamically calculated range of scale distortion values. 
+Every time Peel Orange is run it creates a dynamically calculated range of scale distortion values. Because of this it is not convenient to compare gradients from one projection to another. To mitigate this the Threshold feature was introduced.
+<img align="right" width="217" height="219" src="/img/legend_thres_off.png">
+
+The threshold value represents a percentage of scale distortion that is an acceptable tolerance to the mapmaker. When Peel Orange finishes its calculations the regions that are below the threshold will be turned off in the legend. 
+
+
+
+
 
 
 on a given projection and calculates the scale factor at each of these points. The points are then used in making isolines that visualize the gradient of change in scale distortion over that region.
