@@ -49,7 +49,7 @@ To run Peel Orange go to the `Plugins` dropdown menu and click on `Peel Orange S
   <img width="597" height="607" src="/img/dialog_example.png">
 </p>
 
-First select a layer to use as the bounding box for Peel Orange analysis. This layer must be on the same projection as the project projection. Additionally this projection cannot use a geographic coordinate system (i.e. using degrees as distant units, should be meters or feet instead). This layer must have enough features to use as a rectangular bounding box. 
+First select a layer to use as the bounding box for Peel Orange analysis. This layer must be on the same projection as the project projection. Additionally this projection cannot use a geographic coordinate system (i.e. using degrees as distant units, the projection should be meters or feet instead). This layer must also have enough features to use as a rectangular bounding box. 
 
 If you do not have such a layer, creating one is easy. Create a temporary scratch layer by going to the `Layer` pulldown menu &rarr; `New Temporary Scratch Layer`. Select Polygon `Geometry Type` and make sure the projection is the same as the project. 
 
@@ -63,14 +63,14 @@ This option plots a statistical distribution of scale distortions. The ideal pro
 <img align="right" width="217" height="219" src="/img/legend_thres_off.png">
 Every time Peel Orange is executed it creates a dynamically calculated range of scale distortion values. Because of this it is not convenient to compare gradients from one projection to another. To mitigate this the Threshold feature was introduced.
 
+
 The threshold value represents a percentage of scale distortion that is an acceptable tolerance to the mapmaker. When Peel Orange finishes its calculations the regions that are below the threshold will be turned off in the legend. 
 
 
+## Understanding the results
 
+<p align="center">
+  <img width="1032" height="513" src="/img/understanding_results.png">
+</p>
 
-
-
-on a given projection and calculates the scale factor at each of these points. The points are then used in making isolines that visualize the gradient of change in scale distortion over that region.
-
-This is useful for quickly comparing different projections in preparation for a new map project. OrangePeel can also provide a way of visualizing the changes in making custom projections.
-
+Peel Orange creates a new hex grid layer. The layer styling is graduated with reference to the absolute delta of the scale distortion. That number represents the delta from 1.00. For example a scale distortion with a value of 1.02 will have an absolute delta of 0.02. The lower this number the closer its fidelity is to the scale on the Earth. A color ramp is automatically created with white representing lower distortion and black representing higher distortion. This color ramp and the number of classes can be fine-tuned after Peel Orange is executed.   
