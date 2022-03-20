@@ -45,7 +45,9 @@ When this is performed over thousands of neatly spaces points across a region a 
 ## Peel Orange is easy to use
 To run Peel Orange go to the `Plugins` dropdown menu and click on `Peel Orange Scale Distortion Visualizer`.
 
-![dialog_example](/img/dialog_example.png)
+<p align="center">
+  <img width="597" height="607" src="/img/dialog_example.png">
+</p>
 
 First select a layer to use as the bounding box for Peel Orange analysis. This layer must be on the same projection as the project projection. Additionally this projection cannot use a geographic coordinate system (i.e. using degrees as distant units, should be meters or feet instead). This layer must have enough features to use as a rectangular bounding box. 
 
