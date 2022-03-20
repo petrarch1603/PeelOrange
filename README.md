@@ -1,7 +1,4 @@
 ![Peel Orange](/img/PeelOrange-Banner01.png)
-This is a work in progress.
-
-
 
 Peel Orange is a plugin that visualizes scale distortion on a map. The difficulties and trade-offs of making flat maps from a sphere is a famous and intractable problem in cartography. 
 
@@ -16,6 +13,8 @@ The process for visualizing the distortion is simple. This tool algorithmically 
 Before we go further though, it is important to understand how coordinate systems work. On projected coordinate systems geographic coordinates, i.e. latitude and longitude, are transformed into cartesian x, y coordinates. If you look into the documentation for these projections you'll see that they have map units such as meters or survey feet. 
 If we take one point on one of these projections it will have an x and y value. If we want to go north 500 meters we can just add 500 to the y value and that will give us a new point.  If we want to go south from the original point we just subtract 500 from y. 
 So what if we calculate the distance from that north point to that south point (on the ground), it should equal 1,000 meters, right? Well, actually it doesn't. In most cases it will be a bit longer than 1,000 meters. When analyzed this ratio is the means to visualizing map distortion.
+
+![scale_factor_profile](/img/scale_factor_profile.png)
 
 # Why aren't scales true?
 
