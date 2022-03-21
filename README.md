@@ -30,7 +30,7 @@ So what if we calculate the distance from that north point to that south point (
 
 ![scale_factor_profile](/img/scale_factor_profile.png)
 
-On this simplified profile you can see a cross-section of the projection surface, or map, through Earth's ellipsoid. The symbols with an apostrophe represent points on the map, the symbols with an apostrophe represent points on the Earth. As you can see the distances on the map do not match the distance across the Earth. 
+On this simplified profile you can see a cross-section of the projection surface, or map, through Earth's ellipsoid. The symbols with an apostrophe (A'B'C'D') represent points on the map, the symbols without an apostrophe (ABCD) represent points on the Earth. As you can see the distances on the map do not match the distance across the Earth. 
 
 ## Why aren't scales true?
 
@@ -74,3 +74,16 @@ The threshold value represents a percentage of scale distortion that is an accep
 </p>
 
 Peel Orange creates a new hex grid layer. The layer styling is graduated with reference to the absolute delta of the scale distortion. That number represents the delta from 1.00. For example a scale distortion with a value of 1.02 will have an absolute delta of 0.02. The lower this number the closer its fidelity is to the scale on the Earth. A color ramp is automatically created with white representing lower distortion and black representing higher distortion. This color ramp and the number of classes can be fine-tuned after Peel Orange is executed.   
+
+    
+Consider the salient features of the region you wish to map. Are they within the threshold areas of the map? If they are not, then it might be worth considering another projection and running Peel Orange on that new projection. 
+
+## Stylizing the results
+
+<p align="center">
+  <img width="528" height="483" src="/img/understanding_results.png">
+</p>
+
+You can make the style of the hex layer look transparent with a subtle blur effect. In the layer styling click on `Symbol`, under `Fill` click on `Simple Fill` and change the `Stroke Style` to `No Pen`. Click on the back arrow to get back to the Graduated symbol settings. Under `Layer Rendering` check `Draw Effects` and click on the 'Star' button. Change `Effect Type` to `Blur`. 
+
+Lastly go to the `Color Ramp` and make the white stop completely transparent (opacity = 0%). Fine-tune these settings to find a suitable style. 
