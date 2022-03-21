@@ -35,9 +35,8 @@ import os.path
 from .app import add_metadata_to_layer, App, post_log_message, read_metadata_txt, resolve_path
 from .stat_analysis import StatAnalysis
 from qgis.core import Qgis, QgsProject
-
-
 import locale
+
 
 class PeelOrange:
     """QGIS Plugin Implementation."""
