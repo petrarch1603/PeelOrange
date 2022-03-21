@@ -95,5 +95,9 @@ Lastly go to the `Color Ramp` and make the white stop completely transparent (op
 </p>
 
 <p align="center">
+  <img width="640" height="540" src="/img/supplemental/azi_equi.png">
+</p>
+
+<p align="center">
   <img width="641" height="541" src="/img/supplemental/miller_cylindrical.png">
 </p>
