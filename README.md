@@ -87,3 +87,9 @@ Consider the salient features of the region you wish to map. Are they within the
 You can make the style of the hex layer look transparent with a subtle blur effect. In the layer styling click on `Symbol`, under `Fill` click on `Simple Fill` and change the `Stroke Style` to `No Pen`. Click on the back arrow to get back to the Graduated symbol settings. Under `Layer Rendering` check `Draw Effects` and click on the 'Star' button. Change `Effect Type` to `Blur`. 
 
 Lastly go to the `Color Ramp` and make the white stop completely transparent (opacity = 0%). Fine-tune these settings to find a suitable style. 
+
+# Examples
+
+<p align="center">
+  <img width="1280" height="1080" src="/img/img/supplemental/example_polyconic.png">
+</p>
