@@ -1,11 +1,11 @@
 ![Peel Orange](/img/PeelOrange-Banner01.png)
 
 
-Peel Orange is a plugin that visualizes scale distortion on a map. The difficulties and trade-offs of making flat maps from a sphere is a famous and intractable problem in cartography. 
+Peel Orange is a QGIS3 plugin that visualizes scale distortion on a map. The difficulties and trade-offs of making flat maps from a sphere is a famous and intractable problem in cartography. 
 
 # Installation
 Peel Orange is available through the [QGIS Python Plugins
-Repository](https://plugins.qgis.org/plugins/). Start QGIS3, go to the Plugins menu → Manage and Install Plugins, then search for `Peel Orange Scale Distortion Visualizer`
+Repository](https://plugins.qgis.org/plugins/). Start QGIS3, go to the `Plugins` menu → `Manage and Install Plugins`, then search for `Peel Orange Scale Distortion Visualizer`
 
 ### Manual Installation
 * Clone or download the Peel Orange GitHub repository
