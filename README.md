@@ -93,3 +93,7 @@ Lastly go to the `Color Ramp` and make the white stop completely transparent (op
 <p align="center">
   <img width="640" height="540" src="/img/supplemental/example_polyconic.png">
 </p>
+
+<p align="center">
+  <img width="640" height="540" src="/img/supplemental/miller_cylindrical.png">
+</p>
