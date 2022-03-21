@@ -37,6 +37,8 @@ from .stat_analysis import StatAnalysis
 from qgis.core import Qgis, QgsProject
 
 
+import locale
+
 class PeelOrange:
     """QGIS Plugin Implementation."""
 
@@ -55,11 +57,11 @@ class PeelOrange:
         # initialize plugin directory
         self.plugin_dir = os.path.dirname(__file__)
         # initialize locale
-        locale = QSettings().value('locale/userLocale')[0:2]
+        locale_str = QSettings().value('locale/userLocale')[0:2]
         locale_path = os.path.join(
             self.plugin_dir,
             'i18n',
-            'PeelOrange_{}.qm'.format(locale))
+            'PeelOrange_{}.qm'.format(locale_str))
 
         if os.path.exists(locale_path):
             self.translator = QTranslator()
@@ -202,6 +204,11 @@ class PeelOrange:
                 post_log_message(f"Cannot handle project on {QgsProject.instance().crs()}")
                 warn_box.exec_()
                 return
+            
+            # Get Locale
+            locale.setlocale(locale.LC_ALL,  QSettings().value('locale/userLocale'))
+            
+            
             self.first_start = False
             self.dlg = PeelOrangeDialog()
 
@@ -257,7 +264,7 @@ class PeelOrange:
             # Store user selections as variables.
             my_lyr: QgsVectorLayer = self.dlg.mLCB.currentLayer()
             if self.do_thresh_flag is True:
-                threshold = float(float(self.dlg.thresholdBox.cleanText())/100)
+                threshold = float(locale.atof(self.dlg.thresholdBox.cleanText())/100)
             else:
                 threshold = 0
 
