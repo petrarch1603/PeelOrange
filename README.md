@@ -70,7 +70,7 @@ The threshold value represents a percentage of scale distortion that is an accep
 ## Understanding the results
 
 <p align="center">
-  <img width="773" height="384" src="/img/3376_example.png">
+  <img width="774" height="385" src="/img/understanding_results.png">
 </p>
 
 Peel Orange creates a new hex grid layer. The layer styling is graduated with reference to the absolute delta of the scale distortion. That number represents the delta from 1.00. For example a scale distortion with a value of 1.02 will have an absolute delta of 0.02. The lower this number the closer its fidelity is to the scale on the Earth. A color ramp is automatically created with white representing lower distortion and black representing higher distortion. This color ramp and the number of classes can be fine-tuned after Peel Orange is executed.   
@@ -81,7 +81,7 @@ Consider the salient features of the region you wish to map. Are they within the
 ## Stylizing the results
 
 <p align="center">
-  <img width="528" height="483" src="/img/understanding_results.png">
+  <img width="528" height="483" src="/img/3376_example.png">
 </p>
 
 You can make the style of the hex layer look transparent with a subtle blur effect. In the layer styling click on `Symbol`, under `Fill` click on `Simple Fill` and change the `Stroke Style` to `No Pen`. Click on the back arrow to get back to the Graduated symbol settings. Under `Layer Rendering` check `Draw Effects` and click on the 'Star' button. Change `Effect Type` to `Blur`. 
