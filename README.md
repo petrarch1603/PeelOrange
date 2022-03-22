@@ -8,6 +8,8 @@ Peel Orange is available through the [QGIS Python Plugins
 Repository](https://plugins.qgis.org/plugins/). Start QGIS3, go to the `Plugins` menu → `Manage and Install Plugins`, then search for `Peel Orange Scale Distortion Visualizer`
 
 ### Manual Installation
+
+Alternatively installation manually install for the latest update.
 * Clone or download the Peel Orange GitHub repository
 * Copy `PeelOrange-main` to `python/plugins/` in the current active
   profile, the location of which can be found from within QGIS3 by
