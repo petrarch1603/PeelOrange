@@ -91,6 +91,46 @@ You can make the style of the hex layer look transparent with a subtle blur effe
 
 Lastly go to the `Color Ramp` and make the white stop completely transparent (opacity = 0%). Fine-tune these settings to find a suitable style. 
 
+# Further Thoughts on Projections
+
+## Why Not An Equal Area Index?
+
+<p align="center">
+  <img width="735" height="373" src="/img/supplemental/hourglass.png">
+</p>
+   
+   
+
+<p style="text-align: center;">Equal area Projection invented by John Snyder as a joke.</p>
+
+Equal-Area (also known as Equivalent) maps still have distortion. The surface is stretched in one direction and shrunk in another to compensate.
+
+The above hourglass projection by John Snyder was referenced in Mark Monmonier's *How to Lie with Maps*:
+> “John Snyder, himself a developer of several useful as well as innovative map projections, offered yet another equal-area projection to underscore his cartographic colleagues’ point that an equal-area map is not necessarily a good map. Snyder’s hourglass equal-area projection...preserves areal relationships. But it also demonstrates dramatically that areal fidelity does not mean shape fidelity.”
+(3rd Edition, Page 111)
+
+On this Gall-Peters map with Tissot indicatrices [from Wikipedia](https://commons.wikimedia.org/wiki/Category:Gall-Peters_projection#/media/File:Tissot_indicatrix_world_map_Gall-Peters_equal-area_proj.svg) we can see this distortion in action:
+
+<p align="center">
+  <img width="640" height="406" src="/img/supplemental/gall-peters-tissot.png">
+</p>
+
+Each ellipse contains the same area, but the shape is greatly distorted. We could easily write a script to compare area at different points on the globe, but the results would be misleading. For a map to show scale fidelity, a given point should have consistent scale in all directions. 
+
+In conformal maps the scale *is* consistent in every direction. The ellipse in the map above will no longer be an oval, but a circle. Observe the Tissot indicatrices on the Mercator projection. 
+
+<p align="center">
+  <img width="777" height="720" src="/img/supplemental/Tissot_mercator.png">
+</p>
+
+However, Peel Orange was designed to work on most conventional projections, including non-conformal. For such projections the script will compare the ratio of the distances of each of the axes ([From Wikipedia](https://en.wikipedia.org/wiki/Tissot%27s_indicatrix#/media/File:Indicatrix.png)):
+
+<p align="center">
+  <img width="308" height="325" src="/img/supplemental/Indicatrix.png">
+</p>
+
+Consider the ratio of A' to A. This will be a number over 1.00 and represents a scale factor. Now consider the ratio of B' to B. Which ratio is further away from 1.00? The script will select this value and use it for the scale distortion of that point. This kind of analysis would be missing from an area comparison. 
+
 # Examples
 
 <p align="center">
