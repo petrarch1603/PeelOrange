@@ -93,6 +93,21 @@ Lastly go to the `Color Ramp` and make the white stop completely transparent (op
 
 # Further Thoughts on Projections
 
+## What about the Tissot Indicatrix
+
+<p align="center">
+  <img width="400" height="400" src="/img/supplemental/peirce_tissot.png">
+</p>
+
+> In cartography, a Tissot's indicatrix (Tissot indicatrix, Tissot's ellipse, Tissot ellipse, ellipse of distortion) (plural: "Tissot's indicatrices") is a mathematical contrivance presented by French mathematician Nicolas Auguste Tissot in 1859 and 1871 in order to characterize local distortions due to map projection. It is the geometry that results from projecting a circle of infinitesimal radius from a curved geometric model, such as a globe, onto a map. Tissot proved that the resulting diagram is an ellipse whose axes indicate the two principal directions along which scale is maximal and minimal at that point on the map.
+([Wikipedia](https://en.wikipedia.org/wiki/Tissot%27s_indicatrix))
+
+The Tissot indicatrix is a legendary breakthrough in understanding map projections. There is an [excellent QGIS plugin](https://plugins.qgis.org/plugins/tiss/) by Ervin Wirth and Péter Kun for plotting these indicatrices in QGIS.
+
+However, these indicatrices do not visualize the subtle granularity in scale distortions in different projections. If the cartographer is trying to fine-tune their projection to contain their distortion under 10% it will be difficult to uncover this by looking at ellipses. 
+These indicatrices are generally plotted on fixed meridians and parallels and number in the dozens. Peel Orange calculates thousands of points and assigns them a scale distortion. This blanket of information gives the cartographer a better understanding of the distortion.
+
+
 ## Why Not An Equal Area Index?
 
 <p align="center">
@@ -103,7 +118,7 @@ Lastly go to the `Color Ramp` and make the white stop completely transparent (op
 
 <p style="text-align: center;">Equal area Projection invented by John Snyder as a joke.</p>
 
-Equal-Area (also known as Equivalent) maps still have distortion. The surface is stretched in one direction and shrunk in another to compensate.
+> Equal-Area (also known as Equivalent) maps still have distortion. The surface is stretched in one direction and shrunk in another to compensate.
 
 The above hourglass projection by John Snyder was referenced in Mark Monmonier's *How to Lie with Maps*:
 > “John Snyder, himself a developer of several useful as well as innovative map projections, offered yet another equal-area projection to underscore his cartographic colleagues’ point that an equal-area map is not necessarily a good map. Snyder’s hourglass equal-area projection...preserves areal relationships. But it also demonstrates dramatically that areal fidelity does not mean shape fidelity.”
@@ -129,7 +144,7 @@ However, Peel Orange was designed to work on most conventional projections, incl
   <img width="308" height="325" src="/img/supplemental/Indicatrix.png">
 </p>
 
-Consider the ratio of A' to A. This will be a number over 1.00 and represents a scale factor. Now consider the ratio of B' to B. Which ratio is further away from 1.00? The script will select this value and use it for the scale distortion of that point. This kind of analysis would be missing from an area comparison. 
+Consider the ratio of A' to A (*k*). This will be a number over 1.00 and represents a scale factor. Now consider the ratio of B' to B (*h*). Which ratio is further away from 1.00? The script will select this value and use it for the scale distortion of that point. This kind of analysis would be missing from an area comparison. 
 
 # Examples
 
