@@ -20,6 +20,11 @@ Alternatively install manually install for the latest update.
 
 # Introducing Peel Orange
 
+<p align="center">
+  <img width="1262" height="406" src="/img/spain3examples.png">
+</p>
+
+
 Peel Orange provides a framework for understanding where and how distortion happens. The problems of scale distortion cannot be solved: they can only be understood and reduced. Many of the dilemmas in choosing a map projection are not satisfactorily resolved because there is no easy way to check the fidelity of a given projection. Cartographers often rely on their own sense of feeling in choosing a projection. This is a flawed process because this sense is driven by preconceptions that are themselves based on popular misunderstandings.  
 
 The solution to this problem is to provide a tool that gives the cartographer an objective and falsifiable visualization of their map's distortion. In using this tool the cartographer can pit projections against each other and make an informed choice. The right projection is the first step in making exquisite maps. 
@@ -104,7 +109,7 @@ Lastly go to the `Color Ramp` and make the white stop completely transparent (op
 
 The Tissot indicatrix is a legendary breakthrough in understanding map projections. There is an [excellent QGIS plugin](https://plugins.qgis.org/plugins/tiss/) by Ervin Wirth and Péter Kun for plotting these indicatrices in QGIS.
 
-However, these indicatrices do not visualize the subtle granularity in scale distortions in different projections. If the cartographer is trying to fine-tune their projection to contain their distortion under 10% it will be difficult to uncover this by looking at ellipses. 
+However, these indicatrices do not visualize the subtle granularity in scale distortions on different projections. If the cartographer is trying to fine-tune their projection to contain their distortion under 10% it will be difficult to uncover this by looking at widely spaced ellipses. 
 These indicatrices are generally plotted on fixed meridians and parallels and number in the dozens. Peel Orange calculates thousands of points and assigns them a scale distortion. This blanket of information gives the cartographer a better understanding of the distortion.
 
 
@@ -117,8 +122,10 @@ These indicatrices are generally plotted on fixed meridians and parallels and nu
    
 
 <p style="text-align: center;">Equal area Projection invented by John Snyder as a joke.</p>
+   
+    
 
-> Equal-Area (also known as Equivalent) maps still have distortion. The surface is stretched in one direction and shrunk in another to compensate.
+Equal-Area (also known as Equivalent) maps still have distortion. The surface is stretched in one direction and shrunk in another to compensate.
 
 The above hourglass projection by John Snyder was referenced in Mark Monmonier's *How to Lie with Maps*:
 > “John Snyder, himself a developer of several useful as well as innovative map projections, offered yet another equal-area projection to underscore his cartographic colleagues’ point that an equal-area map is not necessarily a good map. Snyder’s hourglass equal-area projection...preserves areal relationships. But it also demonstrates dramatically that areal fidelity does not mean shape fidelity.”
