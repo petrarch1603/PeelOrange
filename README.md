@@ -21,7 +21,7 @@ Alternatively install manually install for the latest update.
 # Introducing Peel Orange
 
 <p align="center">
-  <img width="1262" height="406" src="/img/supplemental/spain3examples.png">
+  <img width="947" height="305" src="/img/supplemental/spain3examples.png">
 </p>
 
 
